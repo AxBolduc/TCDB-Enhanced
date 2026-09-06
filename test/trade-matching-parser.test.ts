@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { parseMedianPrice, parseTradeMatchCounts } from '../src/features/trade-matching-links/parser';
+import { parseTradeMatchCounts } from '../src/features/trade-matching-links/parser';
+import { parseMedianPrice } from '../src/features/median-prices/parser';
 
 describe('trade matching parsers', () => {
   it('parses trade match counts from fixture html', () => {

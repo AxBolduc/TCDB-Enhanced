@@ -49,5 +49,8 @@ src/
   main.ts
   core/                         shared helpers
   features/
-    trade-matching-links/       current TCDB enhancement feature
+    collection-gallery/
+    control-panel/
+    median-prices/
+    trade-matching-links/
 ```

@@ -6,6 +6,7 @@ import { ADDED_CLASS, renderChecking, renderCounts, renderError } from './render
 
 const CHECKED_ATTR = 'data-tcdb-tm-check-queued';
 const REQUEST_DELAY_MS = 1500;
+let watchingSectionExpansion = false;
 
 const queue = new SerialQueue<{ link: HTMLAnchorElement; memberName: string }>(async ({ link, memberName }) => {
   if (!document.contains(link)) return;
@@ -25,8 +26,15 @@ const queue = new SerialQueue<{ link: HTMLAnchorElement; memberName: string }>(a
 
 export function enhanceCollectionCheckPage(): void {
   addTradeMatchingLinks();
-  watchSectionExpansion();
+  if (!watchingSectionExpansion) {
+    watchSectionExpansion();
+    watchingSectionExpansion = true;
+  }
   queueChecksForExpandedSections();
+}
+
+export function removeTradeMatchingLinks(): void {
+  document.querySelectorAll(`.${ADDED_CLASS}`).forEach(link => link.remove());
 }
 
 function queueCheck(link: HTMLAnchorElement): void {

@@ -1,17 +1,14 @@
-import { isCollectionCheckPage, isTradeMatchingPage, isTransactionsPage } from '../../core/page';
-import { isMedianPriceEnabled, onMedianPriceSettingChange } from '../../core/settings';
-import { enhanceCollectionCheckPage } from './collection-check';
-import { addMedianPricesToCardLinks, removeMedianPrices } from './median-prices';
+import { isCollectionCheckPage } from '../../core/page';
+import { isTradeMatchingLinksEnabled, onTradeMatchingLinksSettingChange } from '../../core/settings';
+import { enhanceCollectionCheckPage, removeTradeMatchingLinks } from './collection-check';
 
 export function initTradeMatchingLinks(): void {
-  if (isCollectionCheckPage()) enhanceCollectionCheckPage();
+  if (!isCollectionCheckPage()) return;
 
-  if (isTradeMatchingPage() || isTransactionsPage()) {
-    if (isMedianPriceEnabled()) addMedianPricesToCardLinks();
+  if (isTradeMatchingLinksEnabled()) enhanceCollectionCheckPage();
 
-    onMedianPriceSettingChange((enabled) => {
-      if (enabled) addMedianPricesToCardLinks();
-      else removeMedianPrices();
-    });
-  }
+  onTradeMatchingLinksSettingChange((enabled) => {
+    if (enabled) enhanceCollectionCheckPage();
+    else removeTradeMatchingLinks();
+  });
 }

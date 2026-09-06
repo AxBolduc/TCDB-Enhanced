@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   enhanceCollectionGallery,
   restoreOriginalCollectionGallery,
@@ -10,6 +10,11 @@ const fixture = readFileSync('test/fixtures/view_collection_gallery.html', 'utf-
 describe('collection gallery', () => {
   beforeEach(() => {
     document.documentElement.innerHTML = fixture;
+    localStorage.clear();
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
   });
 
   it('replaces the two-sided tables with compact cards', () => {
@@ -43,6 +48,37 @@ describe('collection gallery', () => {
     expect(image?.alt).toContain('Front');
     expect(button?.getAttribute('aria-label')).toBe('Show back');
     expect(button?.getAttribute('aria-pressed')).toBe('false');
+  });
+
+  it('loads cards from the next page when the viewport is not full', async () => {
+    const lastPage = fixture.replaceAll('&rsaquo;', 'next');
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      text: async () => lastPage,
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    enhanceCollectionGallery();
+
+    await vi.waitFor(() => {
+      expect(document.querySelectorAll('[data-tcdb-gallery-card]')).toHaveLength(20);
+    });
+    expect(fetchMock).toHaveBeenCalledWith(
+      expect.stringContaining('PageIndex=2'),
+      { credentials: 'same-origin' },
+    );
+  });
+
+  it('does not load another page when infinite loading is disabled', async () => {
+    localStorage.setItem('tcdb-enhanced:infinite-gallery-enabled', 'false');
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    enhanceCollectionGallery();
+    await Promise.resolve();
+
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(document.querySelector<HTMLElement>('[data-tcdb-gallery-sentinel]')?.hidden).toBe(true);
   });
 
   it('restores the original gallery when disabled', () => {

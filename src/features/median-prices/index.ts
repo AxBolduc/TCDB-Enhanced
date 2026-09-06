@@ -1,14 +1,26 @@
 import { COLORS } from '../../core/colors';
 import { sleep } from '../../core/queue';
-import { isMedianPriceEnabled } from '../../core/settings';
+import { isMedianPriceEnabled, onMedianPriceSettingChange } from '../../core/settings';
 import { absoluteUrl } from '../../core/urls';
 import { getCachedPrice, setCachedPrice } from './cache';
 import { parseMedianPrice } from './parser';
 import { renderMedianPrice } from './render';
+import { isTradeMatchingPage, isTransactionsPage } from '../../core/page';
 
 const REQUEST_DELAY_MS = 1500;
 
-export function addMedianPricesToCardLinks(): void {
+export function initMedianPrices(): void {
+  if (!isTradeMatchingPage() && !isTransactionsPage()) return;
+
+  if (isMedianPriceEnabled()) addMedianPricesToCardLinks();
+
+  onMedianPriceSettingChange((enabled) => {
+    if (enabled) addMedianPricesToCardLinks();
+    else removeMedianPrices();
+  });
+}
+
+function addMedianPricesToCardLinks(): void {
   const cardLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('a[href*="/ViewCard.cfm/"]'))
     .filter(link => !link.dataset.tcdbMedianQueued);
 
@@ -42,7 +54,7 @@ export function addMedianPricesToCardLinks(): void {
   }
 }
 
-export function removeMedianPrices(): void {
+function removeMedianPrices(): void {
   document.querySelectorAll<HTMLElement>('[data-tcdb-median-price]').forEach(element => element.remove());
   document.querySelectorAll<HTMLAnchorElement>('a[data-tcdb-median-queued]').forEach(link => {
     delete link.dataset.tcdbMedianQueued;

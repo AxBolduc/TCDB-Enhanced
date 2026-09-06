@@ -1,8 +1,12 @@
 import {
   isCollectionGalleryEnabled,
+  isInfiniteGalleryEnabled,
   isMedianPriceEnabled,
+  isTradeMatchingLinksEnabled,
   setCollectionGalleryEnabled,
+  setInfiniteGalleryEnabled,
   setMedianPriceEnabled,
+  setTradeMatchingLinksEnabled,
 } from '../../core/settings';
 
 const HOST_ID = 'tcdb-enhanced-control-panel';
@@ -200,6 +204,16 @@ const panelMarkup = `
         <h3 class="section-title">Enhancements</h3>
         <div class="setting">
           <div class="setting-copy">
+            <p class="setting-name" id="trade-matching-links-label">Trade matching links</p>
+            <p class="setting-description">Add trade matching links and match counts beside members on collection check pages.</p>
+          </div>
+          <label class="toggle" aria-labelledby="trade-matching-links-label">
+            <input class="trade-matching-links-toggle" type="checkbox">
+            <span class="track" aria-hidden="true"></span>
+          </label>
+        </div>
+        <div class="setting">
+          <div class="setting-copy">
             <p class="setting-name" id="median-price-label">Median prices</p>
             <p class="setting-description">Show card median prices on trade matching and transaction pages.</p>
           </div>
@@ -215,6 +229,16 @@ const panelMarkup = `
           </div>
           <label class="toggle" aria-labelledby="collection-gallery-label">
             <input class="collection-gallery-toggle" type="checkbox">
+            <span class="track" aria-hidden="true"></span>
+          </label>
+        </div>
+        <div class="setting">
+          <div class="setting-copy">
+            <p class="setting-name" id="infinite-gallery-label">Infinite gallery loading</p>
+            <p class="setting-description">Load the next collection page as you scroll.</p>
+          </div>
+          <label class="toggle" aria-labelledby="infinite-gallery-label">
+            <input class="infinite-gallery-toggle" type="checkbox">
             <span class="track" aria-hidden="true"></span>
           </label>
         </div>
@@ -238,10 +262,17 @@ export function initControlPanel(): void {
   const backdrop = shadow.querySelector<HTMLButtonElement>('.backdrop');
   const drawer = shadow.querySelector<HTMLElement>('.drawer');
   const closeButton = shadow.querySelector<HTMLButtonElement>('.close');
+  const tradeMatchingLinksToggle = shadow.querySelector<HTMLInputElement>('.trade-matching-links-toggle');
   const medianPriceToggle = shadow.querySelector<HTMLInputElement>('.median-price-toggle');
   const collectionGalleryToggle = shadow.querySelector<HTMLInputElement>('.collection-gallery-toggle');
+  const infiniteGalleryToggle = shadow.querySelector<HTMLInputElement>('.infinite-gallery-toggle');
 
-  if (!root || !launcher || !backdrop || !drawer || !closeButton || !medianPriceToggle || !collectionGalleryToggle) return;
+  if (!root || !launcher || !backdrop || !drawer || !closeButton || !tradeMatchingLinksToggle || !medianPriceToggle || !collectionGalleryToggle || !infiniteGalleryToggle) return;
+
+  tradeMatchingLinksToggle.checked = isTradeMatchingLinksEnabled();
+  tradeMatchingLinksToggle.addEventListener('change', () => {
+    setTradeMatchingLinksEnabled(tradeMatchingLinksToggle.checked);
+  });
 
   medianPriceToggle.checked = isMedianPriceEnabled();
   medianPriceToggle.addEventListener('change', () => {
@@ -251,6 +282,11 @@ export function initControlPanel(): void {
   collectionGalleryToggle.checked = isCollectionGalleryEnabled();
   collectionGalleryToggle.addEventListener('change', () => {
     setCollectionGalleryEnabled(collectionGalleryToggle.checked);
+  });
+
+  infiniteGalleryToggle.checked = isInfiniteGalleryEnabled();
+  infiniteGalleryToggle.addEventListener('change', () => {
+    setInfiniteGalleryEnabled(infiniteGalleryToggle.checked);
   });
 
   const close = (): void => {

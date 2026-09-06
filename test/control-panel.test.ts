@@ -24,6 +24,18 @@ describe('control panel', () => {
     expect(drawer?.getAttribute('aria-hidden')).toBe('false');
   });
 
+  it('saves the trade matching links setting', () => {
+    initControlPanel();
+
+    const shadow = document.querySelector('#tcdb-enhanced-control-panel')?.shadowRoot;
+    const toggle = shadow?.querySelector<HTMLInputElement>('.trade-matching-links-toggle');
+
+    expect(toggle?.checked).toBe(true);
+    toggle?.click();
+
+    expect(localStorage.getItem('tcdb-enhanced:trade-matching-links-enabled')).toBe('false');
+  });
+
   it('saves the median price setting', () => {
     initControlPanel();
 
@@ -46,6 +58,18 @@ describe('control panel', () => {
     toggle?.click();
 
     expect(localStorage.getItem('tcdb-enhanced:collection-gallery-enabled')).toBe('false');
+  });
+
+  it('saves the infinite gallery setting', () => {
+    initControlPanel();
+
+    const shadow = document.querySelector('#tcdb-enhanced-control-panel')?.shadowRoot;
+    const toggle = shadow?.querySelector<HTMLInputElement>('.infinite-gallery-toggle');
+
+    expect(toggle?.checked).toBe(true);
+    toggle?.click();
+
+    expect(localStorage.getItem('tcdb-enhanced:infinite-gallery-enabled')).toBe('false');
   });
 
   it('closes with Escape', () => {

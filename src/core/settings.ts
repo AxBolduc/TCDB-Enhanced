@@ -1,7 +1,35 @@
+const TRADE_MATCHING_LINKS_KEY = 'tcdb-enhanced:trade-matching-links-enabled';
+const TRADE_MATCHING_LINKS_CHANGE_EVENT = 'tcdb-enhanced:trade-matching-links-change';
 const MEDIAN_PRICE_KEY = 'tcdb-enhanced:median-price-enabled';
 const MEDIAN_PRICE_CHANGE_EVENT = 'tcdb-enhanced:median-price-change';
 const COLLECTION_GALLERY_KEY = 'tcdb-enhanced:collection-gallery-enabled';
 const COLLECTION_GALLERY_CHANGE_EVENT = 'tcdb-enhanced:collection-gallery-change';
+const INFINITE_GALLERY_KEY = 'tcdb-enhanced:infinite-gallery-enabled';
+const INFINITE_GALLERY_CHANGE_EVENT = 'tcdb-enhanced:infinite-gallery-change';
+
+export function isTradeMatchingLinksEnabled(): boolean {
+  try {
+    return localStorage.getItem(TRADE_MATCHING_LINKS_KEY) !== 'false';
+  } catch {
+    return true;
+  }
+}
+
+export function setTradeMatchingLinksEnabled(enabled: boolean): void {
+  try {
+    localStorage.setItem(TRADE_MATCHING_LINKS_KEY, String(enabled));
+  } catch {
+    // The setting still applies for this page when storage is unavailable.
+  }
+
+  window.dispatchEvent(new CustomEvent<boolean>(TRADE_MATCHING_LINKS_CHANGE_EVENT, { detail: enabled }));
+}
+
+export function onTradeMatchingLinksSettingChange(listener: (enabled: boolean) => void): void {
+  window.addEventListener(TRADE_MATCHING_LINKS_CHANGE_EVENT, (event) => {
+    listener((event as CustomEvent<boolean>).detail);
+  });
+}
 
 export function isMedianPriceEnabled(): boolean {
   try {
@@ -47,6 +75,30 @@ export function setCollectionGalleryEnabled(enabled: boolean): void {
 
 export function onCollectionGallerySettingChange(listener: (enabled: boolean) => void): void {
   window.addEventListener(COLLECTION_GALLERY_CHANGE_EVENT, (event) => {
+    listener((event as CustomEvent<boolean>).detail);
+  });
+}
+
+export function isInfiniteGalleryEnabled(): boolean {
+  try {
+    return localStorage.getItem(INFINITE_GALLERY_KEY) !== 'false';
+  } catch {
+    return true;
+  }
+}
+
+export function setInfiniteGalleryEnabled(enabled: boolean): void {
+  try {
+    localStorage.setItem(INFINITE_GALLERY_KEY, String(enabled));
+  } catch {
+    // The setting still applies for this page when storage is unavailable.
+  }
+
+  window.dispatchEvent(new CustomEvent<boolean>(INFINITE_GALLERY_CHANGE_EVENT, { detail: enabled }));
+}
+
+export function onInfiniteGallerySettingChange(listener: (enabled: boolean) => void): void {
+  window.addEventListener(INFINITE_GALLERY_CHANGE_EVENT, (event) => {
     listener((event as CustomEvent<boolean>).detail);
   });
 }

@@ -1,6 +1,8 @@
 import {
   isCollectionGalleryEnabled,
+  isInfiniteGalleryEnabled,
   onCollectionGallerySettingChange,
+  onInfiniteGallerySettingChange,
 } from '../../core/settings';
 
 const GALLERY_ATTRIBUTE = 'data-tcdb-enhanced-gallery';
@@ -19,16 +21,15 @@ export function enhanceCollectionGallery(): void {
   const existingGallery = document.querySelector<HTMLElement>(`[${GALLERY_ATTRIBUTE}]`);
   if (existingGallery) {
     existingGallery.hidden = false;
+    const sentinel = document.querySelector<HTMLElement>('[data-tcdb-gallery-sentinel]');
+    if (sentinel) sentinel.hidden = !isInfiniteGalleryEnabled();
     document.querySelectorAll<HTMLElement>(`[${ORIGINAL_ATTRIBUTE}]`).forEach(element => {
       element.hidden = true;
     });
     return;
   }
 
-  const entries = Array.from(document.querySelectorAll<HTMLImageElement>('table.table img'))
-    .filter(isFrontImage)
-    .map(image => ({ image, table: image.closest<HTMLTableElement>('table.table') }))
-    .filter((entry): entry is { image: HTMLImageElement; table: HTMLTableElement } => Boolean(entry.table));
+  const entries = getGalleryEntries(document);
 
   if (!entries.length) return;
 
@@ -50,13 +51,91 @@ export function enhanceCollectionGallery(): void {
     wrapper.setAttribute(ORIGINAL_ATTRIBUTE, 'true');
     wrapper.hidden = true;
   }
+
+  setupInfiniteScroll(gallery, findNextPageUrl(document));
 }
 
 export function restoreOriginalCollectionGallery(): void {
   document.querySelector<HTMLElement>(`[${GALLERY_ATTRIBUTE}]`)?.setAttribute('hidden', '');
+  document.querySelector<HTMLElement>('[data-tcdb-gallery-sentinel]')?.setAttribute('hidden', '');
   document.querySelectorAll<HTMLElement>(`[${ORIGINAL_ATTRIBUTE}]`).forEach(element => {
     element.hidden = false;
   });
+}
+
+type GalleryEntry = { image: HTMLImageElement; table: HTMLTableElement };
+
+function getGalleryEntries(root: ParentNode): GalleryEntry[] {
+  return Array.from(root.querySelectorAll<HTMLImageElement>('table.table img'))
+    .filter(isFrontImage)
+    .map(image => ({ image, table: image.closest<HTMLTableElement>('table.table') }))
+    .filter((entry): entry is GalleryEntry => Boolean(entry.table));
+}
+
+function findNextPageUrl(root: ParentNode): string | null {
+  const nextLink = Array.from(root.querySelectorAll<HTMLAnchorElement>('.pagination a[href]'))
+    .find(link => link.textContent?.trim() === '›');
+  return nextLink ? new URL(nextLink.getAttribute('href')!, location.href).href : null;
+}
+
+function setupInfiniteScroll(gallery: HTMLElement, initialNextUrl: string | null): void {
+  if (!initialNextUrl) return;
+
+  const sentinel = document.createElement('div');
+  sentinel.dataset.tcdbGallerySentinel = 'true';
+  sentinel.setAttribute('aria-live', 'polite');
+  sentinel.hidden = !isInfiniteGalleryEnabled();
+  gallery.after(sentinel);
+
+  let nextUrl: string | null = initialNextUrl;
+  let loading = false;
+
+  const loadNextPage = async (): Promise<void> => {
+    if (!nextUrl || loading || gallery.hidden || !isInfiniteGalleryEnabled()) return;
+    loading = true;
+    sentinel.textContent = 'Loading more cards…';
+
+    try {
+      const response = await fetch(nextUrl, { credentials: 'same-origin' });
+      if (!response.ok) throw new Error(`Gallery request failed with ${response.status}`);
+
+      const page = new DOMParser().parseFromString(await response.text(), 'text/html');
+      const entries = getGalleryEntries(page);
+      for (const { image, table } of entries) gallery.append(createCard(table, image));
+      nextUrl = findNextPageUrl(page);
+      sentinel.textContent = nextUrl ? '' : 'All cards loaded.';
+    } catch {
+      sentinel.textContent = 'Could not load more cards.';
+      nextUrl = null;
+    } finally {
+      loading = false;
+    }
+
+    if (nextUrl && document.documentElement.scrollHeight <= window.innerHeight + 200) {
+      await loadNextPage();
+    }
+  };
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some(entry => entry.isIntersecting)) void loadNextPage();
+    }, { rootMargin: '600px 0px' });
+    observer.observe(sentinel);
+  } else {
+    window.addEventListener('scroll', () => {
+      const nearBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 600;
+      if (nearBottom) void loadNextPage();
+    }, { passive: true });
+  }
+
+  onInfiniteGallerySettingChange((enabled) => {
+    sentinel.hidden = !enabled || gallery.hidden;
+    if (enabled) void loadNextPage();
+  });
+
+  if (isInfiniteGalleryEnabled() && document.documentElement.scrollHeight <= window.innerHeight + 200) {
+    void loadNextPage();
+  }
 }
 
 function isFrontImage(image: HTMLImageElement): boolean {
@@ -215,6 +294,13 @@ function addGalleryStyles(): void {
     }
     .tcdb-gallery-flip:hover { background: #dbeafe; }
     .tcdb-gallery-flip:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+    [data-tcdb-gallery-sentinel] {
+      min-height: 1px;
+      padding: 0.75rem;
+      color: #64748b;
+      font-size: 0.8rem;
+      text-align: center;
+    }
     @media (max-width: 400px) {
       [${GALLERY_ATTRIBUTE}] {
         grid-template-columns: repeat(2, minmax(0, 1fr));
