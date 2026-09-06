@@ -40,7 +40,7 @@ describe('collection gallery', () => {
     expect(gallery?.style.getPropertyValue('--tcdb-gallery-columns')).toBe('7');
   });
 
-  it('switches between the front and back image', () => {
+  it('switches between the front and back image', async () => {
     enhanceCollectionGallery();
 
     const card = document.querySelector<HTMLElement>('[data-tcdb-gallery-card]');
@@ -48,14 +48,18 @@ describe('collection gallery', () => {
     const button = card?.querySelector<HTMLButtonElement>('.tcdb-gallery-flip');
 
     button?.click();
-    expect(image?.alt).toContain('Back');
-    expect(button?.getAttribute('aria-label')).toBe('Show front');
-    expect(button?.getAttribute('aria-pressed')).toBe('true');
+    await vi.waitFor(() => {
+      expect(image?.alt).toContain('Back');
+      expect(button?.getAttribute('aria-label')).toBe('Show front');
+      expect(button?.getAttribute('aria-pressed')).toBe('true');
+    });
 
     button?.click();
-    expect(image?.alt).toContain('Front');
-    expect(button?.getAttribute('aria-label')).toBe('Show back');
-    expect(button?.getAttribute('aria-pressed')).toBe('false');
+    await vi.waitFor(() => {
+      expect(image?.alt).toContain('Front');
+      expect(button?.getAttribute('aria-label')).toBe('Show back');
+      expect(button?.getAttribute('aria-pressed')).toBe('false');
+    });
   });
 
   it('loads cards from the next page when the viewport is not full', async () => {

@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
 import monkey from 'vite-plugin-monkey';
 
 const packageJson = JSON.parse(
@@ -8,6 +9,7 @@ const packageJson = JSON.parse(
 
 export default defineConfig({
   plugins: [
+    svelte(),
     monkey({
       entry: 'src/main.ts',
       userscript: {
@@ -29,6 +31,9 @@ export default defineConfig({
       },
     }),
   ],
+  resolve: {
+    conditions: ['browser'],
+  },
   test: {
     environment: 'jsdom',
   },

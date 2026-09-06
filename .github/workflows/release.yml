@@ -72,6 +72,9 @@ jobs:
       - name: Apply version for build
         run: pnpm exec npm version ${{ steps.version.outputs.version }} --no-git-tag-version --allow-same-version
 
+      - name: Check types and Svelte components
+        run: pnpm check
+
       - name: Test
         run: pnpm test -- --run
 

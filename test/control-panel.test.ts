@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { initControlPanel } from '../src/features/control-panel';
 
 describe('control panel', () => {
@@ -7,7 +7,7 @@ describe('control panel', () => {
     localStorage.clear();
   });
 
-  it('mounts once and opens from the launcher', () => {
+  it('mounts once and opens from the launcher', async () => {
     initControlPanel();
     initControlPanel();
 
@@ -20,8 +20,10 @@ describe('control panel', () => {
 
     launcher?.click();
 
-    expect(launcher?.getAttribute('aria-expanded')).toBe('true');
-    expect(drawer?.getAttribute('aria-hidden')).toBe('false');
+    await vi.waitFor(() => {
+      expect(launcher?.getAttribute('aria-expanded')).toBe('true');
+      expect(drawer?.getAttribute('aria-hidden')).toBe('false');
+    });
   });
 
   it('saves the trade matching links setting', () => {
@@ -87,7 +89,7 @@ describe('control panel', () => {
     expect(localStorage.getItem('tcdb-enhanced:infinite-gallery-enabled')).toBe('false');
   });
 
-  it('closes with Escape', () => {
+  it('closes with Escape', async () => {
     initControlPanel();
 
     const shadow = document.querySelector('#tcdb-enhanced-control-panel')?.shadowRoot;
@@ -95,9 +97,12 @@ describe('control panel', () => {
     const drawer = shadow?.querySelector<HTMLElement>('.drawer');
 
     launcher?.click();
+    await vi.waitFor(() => expect(launcher?.getAttribute('aria-expanded')).toBe('true'));
     shadow?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
 
-    expect(launcher?.getAttribute('aria-expanded')).toBe('false');
-    expect(drawer?.getAttribute('aria-hidden')).toBe('true');
+    await vi.waitFor(() => {
+      expect(launcher?.getAttribute('aria-expanded')).toBe('false');
+      expect(drawer?.getAttribute('aria-hidden')).toBe('true');
+    });
   });
 });
