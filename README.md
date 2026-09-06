@@ -4,16 +4,16 @@ A modular userscript project for TCDB enhancements.
 
 ## Development
 
-Install dependencies:
+Install dependencies with pnpm:
 
 ```bash
-npm install
+pnpm install
 ```
 
 Start the local userscript dev server:
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 Install the dev userscript URL shown by Vite in your userscript manager once. After that, edit files under `src/` and refresh the TCDB page instead of copying/pasting the script.
@@ -21,7 +21,7 @@ Install the dev userscript URL shown by Vite in your userscript manager once. Af
 ## Build
 
 ```bash
-npm run build
+pnpm build
 ```
 
 The installable single-file userscript is emitted to:
@@ -33,7 +33,7 @@ dist/tcdb-enhanced.user.js
 ## Test
 
 ```bash
-npm test
+pnpm test
 ```
 
 HTML page captures live in `test/fixtures/` and can be used for parser/DOM tests.

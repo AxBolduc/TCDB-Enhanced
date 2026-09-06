@@ -1,5 +1,10 @@
+import { readFileSync } from 'node:fs';
 import { defineConfig } from 'vite';
 import monkey from 'vite-plugin-monkey';
+
+const packageJson = JSON.parse(
+  readFileSync(new URL('./package.json', import.meta.url), 'utf-8'),
+) as { version: string };
 
 export default defineConfig({
   plugins: [
@@ -8,7 +13,7 @@ export default defineConfig({
       userscript: {
         name: 'TCDB Enhanced',
         namespace: 'https://www.tcdb.com/',
-        version: '0.1.0',
+        version: packageJson.version,
         description: 'Enhancements for TCDB collection, trade matching, and transaction pages.',
         author: 'You',
         match: [
