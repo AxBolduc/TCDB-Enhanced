@@ -16,6 +16,8 @@ export default defineConfig({
         version: packageJson.version,
         description: 'Enhancements for TCDB collection, trade matching, and transaction pages.',
         author: 'You',
+        updateURL: 'https://github.com/AxBolduc/TCDB-Enhanced/releases/latest/download/tcdb-enhanced.user.js',
+        downloadURL: 'https://github.com/AxBolduc/TCDB-Enhanced/releases/latest/download/tcdb-enhanced.user.js',
         match: [
           'https://www.tcdb.com/CollectionCheck.cfm*',
           'http://www.tcdb.com/CollectionCheck.cfm*',
