@@ -11,7 +11,14 @@
     context: string;
   };
 
-  let { cards }: { cards: ChecklistCard[] } = $props();
+  import { untrack } from 'svelte';
+
+  let { initialCards }: { initialCards: ChecklistCard[] } = $props();
+  let cards = $state(untrack(() => [...initialCards]));
+
+  export function appendCards(nextCards: ChecklistCard[]): void {
+    cards.push(...nextCards);
+  }
 </script>
 
 <div class="gallery">
@@ -45,6 +52,14 @@
     gap: 1.25rem 1rem;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     margin: 1rem 0 1.5rem;
+  }
+
+  :global([data-tcdb-checklist-sentinel]) {
+    color: #64748b;
+    font-size: 0.8rem;
+    min-height: 1px;
+    padding: 0.75rem;
+    text-align: center;
   }
 
   article { min-width: 0; }

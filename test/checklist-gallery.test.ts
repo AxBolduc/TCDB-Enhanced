@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   enhanceChecklistGallery,
   restoreOriginalChecklist,
@@ -12,6 +12,10 @@ describe('checklist gallery', () => {
   beforeEach(() => {
     document.documentElement.innerHTML = fixture;
     localStorage.clear();
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
   });
 
   it('turns checklist rows into an image-led gallery', () => {
@@ -71,6 +75,44 @@ describe('checklist gallery', () => {
     const first = document.querySelector('[data-tcdb-checklist-card]');
     expect(first?.querySelector('[data-no-image]')?.textContent).toBe('No Image');
     expect(first?.querySelector('img')).toBeNull();
+  });
+
+  it('loads checklist cards from the next page when the viewport is not full', async () => {
+    document.documentElement.innerHTML = fixture.replace(
+      '</body>',
+      '<ul class="pagination"><li><a href="?PageIndex=2">&rsaquo;</a></li></ul></body>',
+    );
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      text: async () => fixture,
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    enhanceChecklistGallery();
+
+    await vi.waitFor(() => {
+      expect(document.querySelectorAll('[data-tcdb-checklist-card]')).toHaveLength(50);
+    });
+    expect(fetchMock).toHaveBeenCalledWith(
+      expect.stringContaining('PageIndex=2'),
+      { credentials: 'same-origin' },
+    );
+  });
+
+  it('does not load another checklist page when infinite loading is disabled', async () => {
+    document.documentElement.innerHTML = fixture.replace(
+      '</body>',
+      '<ul class="pagination"><li><a href="?PageIndex=2">&rsaquo;</a></li></ul></body>',
+    );
+    localStorage.setItem('tcdb-enhanced:infinite-gallery-enabled', 'false');
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    enhanceChecklistGallery();
+    await Promise.resolve();
+
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(document.querySelector<HTMLElement>('[data-tcdb-checklist-sentinel]')?.hidden).toBe(true);
   });
 
   it('restores the checklist table when disabled', () => {
