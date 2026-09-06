@@ -1,4 +1,9 @@
-import { isMedianPriceEnabled, setMedianPriceEnabled } from '../../core/settings';
+import {
+  isCollectionGalleryEnabled,
+  isMedianPriceEnabled,
+  setCollectionGalleryEnabled,
+  setMedianPriceEnabled,
+} from '../../core/settings';
 
 const HOST_ID = 'tcdb-enhanced-control-panel';
 
@@ -120,6 +125,7 @@ const panelMarkup = `
       padding: 16px;
     }
 
+    .setting + .setting { margin-top: 10px; }
     .setting-copy { min-width: 0; }
     .setting-name { font-size: 14px; font-weight: 700; margin: 0 0 4px; }
     .setting-description { color: var(--tcdb-panel-muted); font-size: 12px; line-height: 1.4; margin: 0; }
@@ -202,6 +208,16 @@ const panelMarkup = `
             <span class="track" aria-hidden="true"></span>
           </label>
         </div>
+        <div class="setting">
+          <div class="setting-copy">
+            <p class="setting-name" id="collection-gallery-label">Compact collection gallery</p>
+            <p class="setting-description">Show card fronts in a compact grid with titles and prices.</p>
+          </div>
+          <label class="toggle" aria-labelledby="collection-gallery-label">
+            <input class="collection-gallery-toggle" type="checkbox">
+            <span class="track" aria-hidden="true"></span>
+          </label>
+        </div>
       </main>
       <footer class="footer">TCDB Enhanced</footer>
     </aside>
@@ -223,12 +239,18 @@ export function initControlPanel(): void {
   const drawer = shadow.querySelector<HTMLElement>('.drawer');
   const closeButton = shadow.querySelector<HTMLButtonElement>('.close');
   const medianPriceToggle = shadow.querySelector<HTMLInputElement>('.median-price-toggle');
+  const collectionGalleryToggle = shadow.querySelector<HTMLInputElement>('.collection-gallery-toggle');
 
-  if (!root || !launcher || !backdrop || !drawer || !closeButton || !medianPriceToggle) return;
+  if (!root || !launcher || !backdrop || !drawer || !closeButton || !medianPriceToggle || !collectionGalleryToggle) return;
 
   medianPriceToggle.checked = isMedianPriceEnabled();
   medianPriceToggle.addEventListener('change', () => {
     setMedianPriceEnabled(medianPriceToggle.checked);
+  });
+
+  collectionGalleryToggle.checked = isCollectionGalleryEnabled();
+  collectionGalleryToggle.addEventListener('change', () => {
+    setCollectionGalleryEnabled(collectionGalleryToggle.checked);
   });
 
   const close = (): void => {

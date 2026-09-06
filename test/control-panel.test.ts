@@ -36,6 +36,18 @@ describe('control panel', () => {
     expect(localStorage.getItem('tcdb-enhanced:median-price-enabled')).toBe('false');
   });
 
+  it('saves the compact gallery setting', () => {
+    initControlPanel();
+
+    const shadow = document.querySelector('#tcdb-enhanced-control-panel')?.shadowRoot;
+    const toggle = shadow?.querySelector<HTMLInputElement>('.collection-gallery-toggle');
+
+    expect(toggle?.checked).toBe(true);
+    toggle?.click();
+
+    expect(localStorage.getItem('tcdb-enhanced:collection-gallery-enabled')).toBe('false');
+  });
+
   it('closes with Escape', () => {
     initControlPanel();
 
