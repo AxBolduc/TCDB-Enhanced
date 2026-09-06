@@ -1,0 +1,20 @@
+{
+  "name": "tcdb-enhanced",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "test": "vitest",
+    "test:watch": "vitest --watch"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "typescript": "latest",
+    "vite": "latest",
+    "vite-plugin-monkey": "latest",
+    "vitest": "latest",
+    "jsdom": "^24.1.3"
+  }
+}

@@ -1,0 +1,888 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head><script type="text/javascript" src="/cf_scripts/scripts/cfform.js"></script>
+<script type="text/javascript" src="/cf_scripts/scripts/masks.js"></script>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trade Matching | Trading Card Database</title>
+
+<script type="text/javascript">
+function toggle_highlight(inputTagReference)
+{
+	var is_checked = inputTagReference.checked; //true or false
+	if(is_checked)
+	{
+		inputTagReference.parentNode.parentNode.style.backgroundColor="GreenYellow";
+	}
+	else
+	{
+		inputTagReference.parentNode.parentNode.style.backgroundColor="";
+	}
+}
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VGXS6LWKSL"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-VGXS6LWKSL');
+</script>
+
+<!-- Raptive Head Tag Manual -->
+<script data-no-optimize="1" data-cfasync="false">
+(function(w, d) {
+	w.adthrive = w.adthrive || {};
+	w.adthrive.cmd = w.
+	adthrive.cmd || [];
+	w.adthrive.plugin = 'adthrive-ads-manual';
+	w.adthrive.host = 'ads.adthrive.com';var s = d.createElement('script');
+	s.async = true;
+	s.referrerpolicy='no-referrer-when-downgrade';
+	s.src = 'https://' + w.adthrive.host + '/sites/6744c6004563c858d06c7252/ads.min.js?referrer=' + w.encodeURIComponent(w.location.href) + '&cb=' + (Math.floor(Math.random() * 100) + 1);
+	var n = d.getElementsByTagName('script')[0];
+	n.parentNode.insertBefore(s, n);
+})(window, document);
+</script>
+<!-- End of Raptive Head Tag -->
+<!-- START email detection/removal script -->
+   <script>
+   !function(){"use strict";function e(e){const t=e.match(/((?=([a-z0-9._!#$%+^&*()[\]<>-]+))\2@[a-z0-9._-]+\.[a-z0-9._-]+)/gi);return t?t[0]:""}function t(t){return e(a(t.toLowerCase()))}function a(e){return e.replace(/\s/g,"")}async function n(e){const t={sha256Hash:"",sha1Hash:""};if(!("msCrypto"in window)&&"https:"===location.protocol&&"crypto"in window&&"TextEncoder"in window){const a=(new TextEncoder).encode(e),[n,c]=await Promise.all([s("SHA-256",a),s("SHA-1",a)]);t.sha256Hash=n,t.sha1Hash=c}return t}async function s(e,t){const a=await crypto.subtle.digest(e,t);return Array.from(new Uint8Array(a)).map(e=>("00"+e.toString(16)).slice(-2)).join("")}function c(e){let t=!0;return Object.keys(e).forEach(a=>{0===e[a].length&&(t=!1)}),t}function i(e,t,a){e.splice(t,1);const n="?"+e.join("&")+a.hash;history.replaceState(null,"",n)}var o={checkEmail:e,validateEmail:t,trimInput:a,hashEmail:n,hasHashes:c,removeEmailAndReplaceHistory:i,detectEmails:async function(){const e=new URL(window.location.href),a=Array.from(e.searchParams.entries()).map(e=>`${e[0]}=${e[1]}`);let s,o;const r=["adt_eih","sh_kit"];if(a.forEach((e,t)=>{const a=decodeURIComponent(e),[n,c]=a.split("=");if("adt_ei"===n&&(s={value:c,index:t,emsrc:"url"}),r.includes(n)){o={value:c,index:t,emsrc:"sh_kit"===n?"urlhck":"urlh"}}}),s)t(s.value)&&n(s.value).then(e=>{if(c(e)){const t={value:e,created:Date.now()};localStorage.setItem("adt_ei",JSON.stringify(t)),localStorage.setItem("adt_emsrc",s.emsrc)}});else if(o){const e={value:{sha256Hash:o.value,sha1Hash:""},created:Date.now()};localStorage.setItem("adt_ei",JSON.stringify(e)),localStorage.setItem("adt_emsrc",o.emsrc)}s&&i(a,s.index,e),o&&i(a,o.index,e)},cb:"adthrive"};const{detectEmails:r,cb:l}=o;r()}();
+   </script>
+<!-- END email detection/removal script -->
+<script>
+window.isPopStateNavigation = false;
+document.addEventListener('DOMContentLoaded', function() {
+    window.addEventListener('popstate', function(e) {
+        window.isPopStateNavigation = true;
+    }, true);
+	AjaxNav.init({
+        updateClass: 'ajax-update-area',
+        pagePatterns: ['TradeMatching.cfm'],
+        scrollToTop: false,
+        ga4: {
+            enabled: true,
+            trackPageViews: true,
+            trackClicks: true,
+            trackFormSubmissions: true,
+            measurementId: 'G-VGXS6LWKSL',
+            debug: false
+        },
+        onAfterLoad: function(url) {
+            handleCustomScroll(url);
+			cleanupModals();
+        }
+    });
+	
+	var originalPopState = window.onpopstate;
+    window.addEventListener('popstate', function(e) {
+        window.isPopStateNavigation = true;
+    }, true);
+});
+
+function handleCustomScroll(url) {
+    if (window.isPopStateNavigation) {
+        window.isPopStateNavigation = false;
+        return;
+    }
+    
+    if (url.includes('#')) {
+        var hash = url.substring(url.indexOf('#'));
+        var targetElement = document.querySelector(hash);
+        if (targetElement) {
+            setTimeout(function() {
+                targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+            return;
+        }
+    }
+    
+    var isMobile = window.innerWidth <= 768;
+    
+    if (isMobile) {
+        var contentArea = document.getElementById('main-content-area');
+        if (contentArea) {
+            setTimeout(function() {
+                contentArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+    } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+function cleanupModals() {
+    var backdrops = document.querySelectorAll('.modal-backdrop');
+    backdrops.forEach(function(backdrop) {
+        backdrop.remove();
+    });
+    
+    document.body.classList.remove('modal-open');
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+    
+    var modals = document.querySelectorAll('.modal.show');
+    modals.forEach(function(modalElement) {
+        var modal = bootstrap.Modal.getInstance(modalElement);
+        if (modal) {
+            modal.hide();
+        }
+    });
+}
+</script>
+<script async src="https://epnt.ebay.com/static/epn-smart-tools.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.19.1/cdn/themes/light.css" />
+<script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.19.1/cdn/shoelace.js" ></script>
+<link href="/fontawesome/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/default6.css">
+<script src="/js/ajax-navigation-v2.js"></script>
+<script type="text/javascript">
+<!--
+    _CF_checkCFForm_1 = function(_CF_this)
+    {
+        //reset on submit
+        _CF_error_exists = false;
+        _CF_error_messages = new Array();
+        _CF_error_fields = new Object();
+        _CF_FirstErrorField = null;
+
+
+        //display error messages and return success
+        if( _CF_error_exists )
+        {
+            if( _CF_error_messages.length > 0 )
+            {
+                // show alert() message
+                _CF_onErrorAlert(_CF_error_messages);
+                // set focus to first form error, if the field supports js focus().
+                if( _CF_this[_CF_FirstErrorField].type == "text" )
+                { _CF_this[_CF_FirstErrorField].focus(); }
+
+            }
+            return false;
+        }else {
+            return true;
+        }
+    }
+//-->
+</script>
+<script type="text/javascript">
+<!--
+    _CF_checkCFForm_2 = function(_CF_this)
+    {
+        //reset on submit
+        _CF_error_exists = false;
+        _CF_error_messages = new Array();
+        _CF_error_fields = new Object();
+        _CF_FirstErrorField = null;
+
+
+        //display error messages and return success
+        if( _CF_error_exists )
+        {
+            if( _CF_error_messages.length > 0 )
+            {
+                // show alert() message
+                _CF_onErrorAlert(_CF_error_messages);
+                // set focus to first form error, if the field supports js focus().
+                if( _CF_this[_CF_FirstErrorField].type == "text" )
+                { _CF_this[_CF_FirstErrorField].focus(); }
+
+            }
+            return false;
+        }else {
+            return true;
+        }
+    }
+//-->
+</script>
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+
+<body>
+<div class="container-lg">
+<div id="topnav" class="row">
+  <div class="col-md-3"><div class="d-none d-sm-block"><div align="center"><a href="/"><img src="/Images/TCDbLogo.gif" border="0" class="img-fluid" alt="TCDb logo" width="225" height="90"></a></div></div><div class="d-block d-sm-none"><table cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td width="100" align="center"><a href="/"><img src="/Images/TCDbLogo.gif" border="0" width="125" class="img-fluid" alt="TCDb logo"></a></td></tr></table></div></div>
+  <div class="col-md-9">
+  	<div class="row">
+    	<div class="col-sm-12">
+        	<table border="0" width="100%" height="90" bordercolor="#000000" cellpadding="0" cellspacing="0" align="center">
+            <tr>
+            <td bgcolor="#C6491A">
+            <div align="center"></div></td>
+            </tr></table>
+            </div>
+    	</div>
+  </div>
+</div>
+<div id="topnav" class="row"><div class="col-12">
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span> 
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown">
+	  	<a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Browse
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+			<a href="/ViewAll.cfm/sp/Baseball" class="dropdown-item">Baseball</a>
+			<a href="/ViewAll.cfm/sp/Basketball" class="dropdown-item">Basketball</a>
+			<a href="/ViewAll.cfm/sp/Boxing" class="dropdown-item">Boxing</a>
+			<a href="/ViewAll.cfm/sp/Cricket" class="dropdown-item">Cricket</a>
+			<a href="/ViewAll.cfm/sp/Football" class="dropdown-item">Football</a>
+			<a href="/ViewAll.cfm/sp/Gaming" class="dropdown-item">Gaming</a>
+			<a href="/ViewAll.cfm/sp/Golf" class="dropdown-item">Golf</a>
+			<a href="/ViewAll.cfm/sp/Hockey" class="dropdown-item">Hockey</a>
+			<a href="/ViewAll.cfm/sp/Misc Sports" class="dropdown-item">Misc Sports</a>
+			<a href="/ViewAll.cfm/sp/MMA" class="dropdown-item">MMA</a>
+			<a href="/ViewAll.cfm/sp/Multi-Sport" class="dropdown-item">Multi-Sport</a>
+			<a href="/ViewAll.cfm/sp/Non-Sport" class="dropdown-item">Non-Sport</a>
+			<a href="/ViewAll.cfm/sp/Racing" class="dropdown-item">Racing</a>
+			<a href="/ViewAll.cfm/sp/Soccer" class="dropdown-item">Soccer</a>
+			<a href="/ViewAll.cfm/sp/Tennis" class="dropdown-item">Tennis</a>
+			<a href="/ViewAll.cfm/sp/Wrestling" class="dropdown-item">Wrestling</a>
+        </ul>
+      </li>
+      <li class="nav-item"><a class="nav-link active" href="#Navigation">More <i class="fa fa-circle-chevron-down"></i></a></li>
+    </ul>
+	<div class="mx-auto">
+  <form class="navbar-form navbar-left" role="search" action="/Search.cfm" id="cse-search-box" novalidate="true" data-username="AxBolduc"><div class="form-group">
+        <table border="0" cellpadding="0" cellspacing="0" align="center">
+        <tr><td>
+		<select name="SearchCategory" size="1" class="form-select" style="min-width: 120px;">
+        
+        <option value="Baseball" selected>Baseball</option>
+        <option value="Basketball" >Basketball</option>
+        <option value="Boxing" >Boxing</option>
+        <option value="Cricket" >Cricket</option>
+        <option value="Football" >Football</option>
+        <option value="Gaming" >Gaming</option>
+        <option value="Golf" >Golf</option>
+        <option value="Hockey" >Hockey</option>
+        <option value="Misc Sports" >Misc Sports</option>
+        <option value="MMA" >MMA</option>
+        <option value="Multi-Sport" >Multi-Sport</option>
+        <option value="Non-Sport" >Non-Sport</option>
+        <option value="Racing" >Racing</option>
+        <option value="Soccer" >Soccer</option>
+        <option value="Tennis" >Tennis</option>
+        <option value="Wrestling" >Wrestling</option>
+        </select>
+      </td><td width="2">&nbsp;</td>
+      <td><input type="hidden" name="cx" value="partner-pub-2387250451295121:hes0ib-44xp" />
+        <input type="hidden" name="cof" value="FORID:10" />
+        <input type="hidden" name="ie" value="ISO-8859-1" />
+		<input name="q" type="text" class="form-control mr-sm-2" placeholder="Search" size="45" autocomplete="on" aria-expanded="false" required="true"></td><td width="2">&nbsp;</td>
+      <td class="d-none d-sm-block"><button type="submit" class="btn btn-primary my-2 my-sm-0">Search</button></td><td width="2">&nbsp;</td>
+	  <td class="d-none d-md-table-cell"><figcaption class="figure-caption"><a class="link-light text-white" href="/AdvancedSearch.cfm">Advanced</a></figcaption></td>
+      </tr></table></div></form></div>
+	  <ul class="navbar-nav ml-auto d-md-none"><li class="nav-item"><figcaption class="figure-caption"><a class="link-light text-white" href="/AdvancedSearch.cfm">Advanced Search</a></figcaption></li></ul>
+      <ul class="navbar-nav ml-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="fa fa-user"></i> AxBolduc
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+        	<h6 class="dropdown-header">Rookie</h6>
+            <a href="/Collections.cfm/AxBolduc" class="dropdown-item">Collection</a>
+			<a href="/CollectionManager.cfm" class="dropdown-item">Collection (New)</a>
+            <a href="/Messages.cfm" class="dropdown-item">Messages</a>
+<a href="/Profile.cfm/AxBolduc" class="dropdown-item">Profile</a>
+            <a href="/YourTransactions.cfm" class="dropdown-item">Transactions</a>
+            <a href="/LogOff.cfm" class="dropdown-item">Logout</a>
+        </ul>
+      </li>
+      </ul>
+      </div>
+</nav></div></div>
+
+<script src="/js/search-autocomplete.js"></script>
+<div id="content" class="row">
+<div class="col-md-8 nopadding">
+<div class="block1">
+<div id="main-content-area" class="ajax-update-area">
+<nav aria-label="breadcrumb">
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="/"><i class="fa-solid fa-house" title="Homepage"></i></a></li>
+  <li class="breadcrumb-item"><a href="/Profile.cfm/AxBolduc">Profile</a></li> 
+  <li class="breadcrumb-item"><a href="/TradeMatching.cfm">Trade Matching</a></li><li class="breadcrumb-item active" aria-current="page">Details</li>
+</ol></nav>
+<a href="/TradeMatching.cfm" style="text-decoration:none"><h1 class="site">Trade Matching</h1></a>
+
+    <div class="row">
+	<div class="col-sm-3"><div align="center">
+	<a href="/Profile.cfm/GeoGeo" style="text-decoration:none"><img loading="lazy" src="/Images/Profiles/8C24758E-D296-470A-B003-333B8DFC90D2.jpeg" class="img-fluid img-thumbnail"></a>
+    </div></div>
+    <div class="col-sm-9">
+      <table class="table table-sm table-borderless">
+  <tr bgcolor="#fafafa">
+    <td colspan="3" valign="top"><a href="/Profile.cfm/GeoGeo" style="text-decoration:none"><h3 class="site">GeoGeo</h3></a> <a href="/MemberFeedback.cfm/GeoGeo" target="_blank"><span class="badge bg-success">100.00% Positive</span> <span class="badge bg-secondary">594 Comments</span></a></td>
+  </tr>
+  <tr bgcolor="#fafafa">
+    <td nowrap><strong>Member Since:</strong></td>
+    <td>&nbsp;</td>
+    <td>3/10/2022</td>
+  </tr>
+  <tr bgcolor="#fafafa">
+    <td nowrap><strong>Last Login:</strong></td>
+    <td>&nbsp;</td>
+    <td>9/5/2026</td>
+  </tr>
+  <tr bgcolor="#fafafa">
+    <td nowrap><strong>Location:</strong></td>
+    <td>&nbsp;</td>
+    <td>California, United States</td>
+  </tr>
+  
+</table>
+</div></div>
+
+<hr />
+	
+	<p><div class="alert alert-warning" role="alert"><i class="fa fa-exclamation-triangle"></i> Below is a list of all the cards that match between your lists and this member's lists.  This is not a recommendation from the site of which cards to include in any potential trades.  <a href="/FAQ.cfm#Trading" target="_blank">Please review the FAQ for tips on trading</a>.</div></p>
+	
+		<div align="right"><p><div class="btn-group">
+		  <button type="button" class="btn dropdown-toggle btn-sm btn-primary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			Options <span class="caret"></span>
+		  </button>
+		  <ul class="dropdown-menu dropdown-menu-end">
+			<li><a href="?ACTION=ADDALL&Member=GeoGeo&iSetID=" class="dropdown-item"><i class="fa fa-plus"></i> Add All Items to New Trade</a></li> <li><a href="" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa fa-trash"></i> Delete This Match</a></li> 
+		  </ul>
+		</div></p></div>
+		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Delete This Match</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			  </div>
+			  <div class="modal-body">
+				Are you sure you want to delete this match?
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				<a href="?ACTION=DELETEMATCH&ID=47896410&Country=United States&FeedbackScore=100&FeedbackCount=594&AllowTransactions=Y"><button type="button" class="btn btn-danger">Delete</button></a>
+			  </div>
+			</div>
+		  </div>
+		</div>
+	
+<table class="table table-bordered">
+<tr bgcolor="#fafafa"><td width="50%" valign="top">
+<form name="CFForm_1" id="CFForm_1" action="?ACTION=ADDSELECTED1" method="post" onsubmit="return _CF_checkCFForm_1(this)"><input name="Member" id="Member"  type="hidden" value="GeoGeo" /><input name="iSetID" id="iSetID"  type="hidden" />
+<p><table class="table table-borderless table-sm" id="table1">
+	<tr><td></td><td valign="top" colspan="4"><input type="checkbox" class="form-check-input" id="select_all1"> <small>Select All</small></td><td valign="top"><strong>For Sale / Trade List Matches (6 Items)</strong></td></tr>
+
+      <tr bgcolor="#fafafa"><td valign="top" nowrap="nowrap">1.</td>
+      <td width="13" valign="top" align="center"><input type="checkbox" class="form-check-input" onclick="toggle_highlight(this)" name="ItemID" value="38487099_1045850958_ _ _ _ _ _ _1" /></td>
+      <td nowrap width="5">&nbsp;</td>
+      <td width="35"> 
+                    <div class="position-relative" style="width:25px;height:35px;">
+                        <img loading="lazy" src="/Images/Thumbs/Baseball/654047/654047_38487099RepThumb.jpg" border="0" alt="image thumbnail" />
+                        <button type="button" aria-label="open front image modal" class="btn btn-mod-modal-open-overlay" data-bs-toggle="modal" data-bs-target="#itemsFrontModal_1"></button>
+                    </div>
+                
+      </td>
+      <td nowrap width="5">&nbsp;</td>
+      <td>Baseball - <a href="/ViewCard.cfm/sid/654047/cid/38487099/2026-Topps-Chrome-28-Corey-Seager" target="_blank">2026 Topps Chrome #28 Corey Seager - Texas Rangers</a> </td>
+    </tr>
+
+<div class="modal fade" id="itemsFrontModal_1" tabindex="-1" role="dialog" aria-labelledby="itemsFrontModalLabel_1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="itemsFrontModalLabel_1">2026 Topps Chrome #28 Corey Seager </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img loading="lazy" src="/Images/Cards/Baseball/654047/654047-38487099RepFr.jpg" alt="2026 Topps Chrome #28 Corey Seager front" class="img-fluid">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+      <tr bgcolor="#fafafa"><td valign="top" nowrap="nowrap">2.</td>
+      <td width="13" valign="top" align="center"><input type="checkbox" class="form-check-input" onclick="toggle_highlight(this)" name="ItemID" value="38487215_1045850960_ _ _ _ _ _ _1" /></td>
+      <td nowrap width="5">&nbsp;</td>
+      <td width="35"> 
+                    <div class="position-relative" style="width:25px;height:35px;">
+                        <img loading="lazy" src="/Images/Thumbs/Baseball/654047/654047_38487215Thumb.jpg" border="0" alt="image thumbnail" />
+                        <button type="button" aria-label="open front image modal" class="btn btn-mod-modal-open-overlay" data-bs-toggle="modal" data-bs-target="#itemsFrontModal_2"></button>
+                    </div>
+                
+      </td>
+      <td nowrap width="5">&nbsp;</td>
+      <td>Baseball - <a href="/ViewCard.cfm/sid/654047/cid/38487215/2026-Topps-Chrome-144-Giancarlo-Stanton" target="_blank">2026 Topps Chrome #144 Giancarlo Stanton - New York Yankees</a> </td>
+    </tr>
+
+<div class="modal fade" id="itemsFrontModal_2" tabindex="-1" role="dialog" aria-labelledby="itemsFrontModalLabel_2">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="itemsFrontModalLabel_2">2026 Topps Chrome #144 Giancarlo Stanton </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img loading="lazy" src="/Images/Cards/Baseball/654047/654047-38487215Fr.jpg" alt="2026 Topps Chrome #144 Giancarlo Stanton front" class="img-fluid">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+      <tr bgcolor="#fafafa"><td valign="top" nowrap="nowrap">3.</td>
+      <td width="13" valign="top" align="center"><input type="checkbox" class="form-check-input" onclick="toggle_highlight(this)" name="ItemID" value="38487219_1045850953_ _ _ _ _ _ _1" /></td>
+      <td nowrap width="5">&nbsp;</td>
+      <td width="35"> 
+                    <div class="position-relative" style="width:25px;height:35px;">
+                        <img loading="lazy" src="/Images/Thumbs/Baseball/654047/654047_38487219Thumb.jpg" border="0" alt="image thumbnail" />
+                        <button type="button" aria-label="open front image modal" class="btn btn-mod-modal-open-overlay" data-bs-toggle="modal" data-bs-target="#itemsFrontModal_3"></button>
+                    </div>
+                
+      </td>
+      <td nowrap width="5">&nbsp;</td>
+      <td>Baseball - <a href="/ViewCard.cfm/sid/654047/cid/38487219/2026-Topps-Chrome-148-Max-Scherzer" target="_blank">2026 Topps Chrome #148 Max Scherzer - Toronto Blue Jays</a> </td>
+    </tr>
+
+<div class="modal fade" id="itemsFrontModal_3" tabindex="-1" role="dialog" aria-labelledby="itemsFrontModalLabel_3">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="itemsFrontModalLabel_3">2026 Topps Chrome #148 Max Scherzer </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img loading="lazy" src="/Images/Cards/Baseball/654047/654047-38487219Fr.jpg" alt="2026 Topps Chrome #148 Max Scherzer front" class="img-fluid">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+      <tr bgcolor="#fafafa"><td valign="top" nowrap="nowrap">4.</td>
+      <td width="13" valign="top" align="center"><input type="checkbox" class="form-check-input" onclick="toggle_highlight(this)" name="ItemID" value="38487220_1045850959_ _ _ _ _ _ _1" /></td>
+      <td nowrap width="5">&nbsp;</td>
+      <td width="35"> 
+                    <div class="position-relative" style="width:25px;height:35px;">
+                        <img loading="lazy" src="/Images/Thumbs/Baseball/654047/654047_38487220Thumb.jpg" border="0" alt="image thumbnail" />
+                        <button type="button" aria-label="open front image modal" class="btn btn-mod-modal-open-overlay" data-bs-toggle="modal" data-bs-target="#itemsFrontModal_4"></button>
+                    </div>
+                
+      </td>
+      <td nowrap width="5">&nbsp;</td>
+      <td>Baseball - <a href="/ViewCard.cfm/sid/654047/cid/38487220/2026-Topps-Chrome-149-Julio-Rodríguez" target="_blank">2026 Topps Chrome #149 Julio Rodríguez - Seattle Mariners</a> </td>
+    </tr>
+
+<div class="modal fade" id="itemsFrontModal_4" tabindex="-1" role="dialog" aria-labelledby="itemsFrontModalLabel_4">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="itemsFrontModalLabel_4">2026 Topps Chrome #149 Julio Rodríguez </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img loading="lazy" src="/Images/Cards/Baseball/654047/654047-38487220Fr.jpg" alt="2026 Topps Chrome #149 Julio Rodríguez front" class="img-fluid">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+      <tr bgcolor="#fafafa"><td valign="top" nowrap="nowrap">5.</td>
+      <td width="13" valign="top" align="center"><input type="checkbox" class="form-check-input" onclick="toggle_highlight(this)" name="ItemID" value="38487242_1045850952_ _ _ _ _ _ _1" /></td>
+      <td nowrap width="5">&nbsp;</td>
+      <td width="35"> 
+                    <div class="position-relative" style="width:25px;height:35px;">
+                        <img loading="lazy" src="/Images/Thumbs/Baseball/654047/654047_38487242Thumb.jpg" border="0" alt="image thumbnail" />
+                        <button type="button" aria-label="open front image modal" class="btn btn-mod-modal-open-overlay" data-bs-toggle="modal" data-bs-target="#itemsFrontModal_5"></button>
+                    </div>
+                
+      </td>
+      <td nowrap width="5">&nbsp;</td>
+      <td>Baseball - <a href="/ViewCard.cfm/sid/654047/cid/38487242/2026-Topps-Chrome-171-Austin-Riley" target="_blank">2026 Topps Chrome #171 Austin Riley - Atlanta Braves</a> </td>
+    </tr>
+
+<div class="modal fade" id="itemsFrontModal_5" tabindex="-1" role="dialog" aria-labelledby="itemsFrontModalLabel_5">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="itemsFrontModalLabel_5">2026 Topps Chrome #171 Austin Riley </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img loading="lazy" src="/Images/Cards/Baseball/654047/654047-38487242Fr.jpg" alt="2026 Topps Chrome #171 Austin Riley front" class="img-fluid">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+      <tr bgcolor="#fafafa"><td valign="top" nowrap="nowrap">6.</td>
+      <td width="13" valign="top" align="center"><input type="checkbox" class="form-check-input" onclick="toggle_highlight(this)" name="ItemID" value="38487251_1047153745_ _ _ _ _ _ _1" /></td>
+      <td nowrap width="5">&nbsp;</td>
+      <td width="35"> 
+                    <div class="position-relative" style="width:25px;height:35px;">
+                        <img loading="lazy" src="/Images/Thumbs/Baseball/654047/654047_38487251Thumb.jpg" border="0" alt="image thumbnail" />
+                        <button type="button" aria-label="open front image modal" class="btn btn-mod-modal-open-overlay" data-bs-toggle="modal" data-bs-target="#itemsFrontModal_6"></button>
+                    </div>
+                
+      </td>
+      <td nowrap width="5">&nbsp;</td>
+      <td>Baseball - <a href="/ViewCard.cfm/sid/654047/cid/38487251/2026-Topps-Chrome-180-Riley-Greene" target="_blank">2026 Topps Chrome #180 Riley Greene - Detroit Tigers</a> </td>
+    </tr>
+
+<div class="modal fade" id="itemsFrontModal_6" tabindex="-1" role="dialog" aria-labelledby="itemsFrontModalLabel_6">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="itemsFrontModalLabel_6">2026 Topps Chrome #180 Riley Greene </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img loading="lazy" src="/Images/Cards/Baseball/654047/654047-38487251Fr.jpg" alt="2026 Topps Chrome #180 Riley Greene front" class="img-fluid">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+</table></p>
+      <p><strong>Add selected to:</strong></p>
+      <p><select name="TransactionID" class="form-select">
+    
+    <option value="Trade">New Trade Transaction</option>
+	</select></p>
+	<p><button type="submit" class="btn btn-primary btn-sm">Submit</button></p> </form>
+</td>
+<td width="50%" valign="top">
+<form name="CFForm_2" id="CFForm_2" action="?ACTION=ADDSELECTED2" method="post" onsubmit="return _CF_checkCFForm_2(this)"><input name="Member" id="Member"  type="hidden" value="GeoGeo" /><input name="iSetID" id="iSetID"  type="hidden" />
+<p><table class="table table-borderless table-sm" id="table2">
+	<tr><td></td><td valign="top" colspan="4"><input type="checkbox" class="form-check-input" id="select_all2"> <small>Select All</small></td><td valign="top"><strong>Wantlist Matches (6 Items)</strong></td></tr>
+	
+      <tr bgcolor="#fafafa"><td valign="top" nowrap="nowrap">1.</td>
+      <td width="13" valign="top" align="center"><input type="checkbox" class="form-check-input" onclick="toggle_highlight(this)" name="ItemID" value="18764358_513594341_ _ _ _ _ _ _2" /></td>
+      <td nowrap width="5">&nbsp;</td>
+      <td width="35"> 
+                    <div class="position-relative" style="width:25px;height:35px;">
+                        <img loading="lazy" src="/Images/Thumbs/Baseball/275887/275887_18764358Thumb.jpg" border="0" alt="image thumbnail" />
+                        <button type="button" aria-label="open front image modal" class="btn btn-mod-modal-open-overlay" data-bs-toggle="modal" data-bs-target="#items2FrontModal_1"></button>
+                    </div>
+                
+      </td>
+      <td nowrap width="5">&nbsp;</td>
+      <td>Baseball - <a href="/ViewCard.cfm/sid/275887/cid/18764358/2022-Topps-524-Connor-Seabold" target="_blank">2022 Topps #524 Connor Seabold - Boston Red Sox</a> RC </td>
+    </tr>
+
+<div class="modal fade" id="items2FrontModal_1" tabindex="-1" role="dialog" aria-labelledby="items2FrontModalLabel_1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="items2FrontModalLabel_1">2022 Topps #524 Connor Seabold </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img loading="lazy" src="/Images/Cards/Baseball/275887/275887-18764358Fr.jpg" alt="2022 Topps #524 Connor Seabold front" class="img-fluid">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+      <tr bgcolor="#fafafa"><td valign="top" nowrap="nowrap">2.</td>
+      <td width="13" valign="top" align="center"><input type="checkbox" class="form-check-input" onclick="toggle_highlight(this)" name="ItemID" value="21211781_636502057_ _ _ _ _ _ _2" /></td>
+      <td nowrap width="5">&nbsp;</td>
+      <td width="35"> 
+                    <div class="position-relative" style="width:25px;height:35px;">
+                        <img loading="lazy" src="/Images/Thumbs/Baseball/357729/357729_21211781Thumb.jpg" border="0" alt="image thumbnail" />
+                        <button type="button" aria-label="open front image modal" class="btn btn-mod-modal-open-overlay" data-bs-toggle="modal" data-bs-target="#items2FrontModal_2"></button>
+                    </div>
+                
+      </td>
+      <td nowrap width="5">&nbsp;</td>
+      <td>Baseball - <a href="/ViewCard.cfm/sid/357729/cid/21211781/2023-Bowman-58-Masataka-Yoshida" target="_blank">2023 Bowman #58 Masataka Yoshida - Boston Red Sox</a> RC </td>
+    </tr>
+
+<div class="modal fade" id="items2FrontModal_2" tabindex="-1" role="dialog" aria-labelledby="items2FrontModalLabel_2">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="items2FrontModalLabel_2">2023 Bowman #58 Masataka Yoshida </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img loading="lazy" src="/Images/Cards/Baseball/357729/357729-21211781Fr.jpg" alt="2023 Bowman #58 Masataka Yoshida front" class="img-fluid">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+      <tr bgcolor="#fafafa"><td valign="top" nowrap="nowrap">3.</td>
+      <td width="13" valign="top" align="center"><input type="checkbox" class="form-check-input" onclick="toggle_highlight(this)" name="ItemID" value="33561143_931637667_ _ _ _ _ _ _1" /></td>
+      <td nowrap width="5">&nbsp;</td>
+      <td width="35"> 
+                    <div class="position-relative" style="width:25px;height:35px;">
+                        <img loading="lazy" src="/Images/Thumbs/Baseball/585448/585448_33561143Thumb.jpg" border="0" alt="image thumbnail" />
+                        <button type="button" aria-label="open front image modal" class="btn btn-mod-modal-open-overlay" data-bs-toggle="modal" data-bs-target="#items2FrontModal_3"></button>
+                    </div>
+                
+      </td>
+      <td nowrap width="5">&nbsp;</td>
+      <td>Baseball - <a href="/ViewCard.cfm/sid/585448/cid/33561143/2026-Topps-15-Payton-Tolle" target="_blank">2026 Topps #15 Payton Tolle - Boston Red Sox</a> RC </td>
+    </tr>
+
+<div class="modal fade" id="items2FrontModal_3" tabindex="-1" role="dialog" aria-labelledby="items2FrontModalLabel_3">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="items2FrontModalLabel_3">2026 Topps #15 Payton Tolle </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img loading="lazy" src="/Images/Cards/Baseball/585448/585448-33561143Fr.jpg" alt="2026 Topps #15 Payton Tolle front" class="img-fluid">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+      <tr bgcolor="#fafafa"><td valign="top" nowrap="nowrap">4.</td>
+      <td width="13" valign="top" align="center"><input type="checkbox" class="form-check-input" onclick="toggle_highlight(this)" name="ItemID" value="33561326_931638854_ _ _ _ _ _ _1" /></td>
+      <td nowrap width="5">&nbsp;</td>
+      <td width="35"> 
+                    <div class="position-relative" style="width:25px;height:35px;">
+                        <img loading="lazy" src="/Images/Thumbs/Baseball/585448/585448_33561326Thumb.jpg" border="0" alt="image thumbnail" />
+                        <button type="button" aria-label="open front image modal" class="btn btn-mod-modal-open-overlay" data-bs-toggle="modal" data-bs-target="#items2FrontModal_4"></button>
+                    </div>
+                
+      </td>
+      <td nowrap width="5">&nbsp;</td>
+      <td>Baseball - <a href="/ViewCard.cfm/sid/585448/cid/33561326/2026-Topps-198-Boston-Red-Sox" target="_blank">2026 Topps #198 Boston Red Sox - Boston Red Sox</a> TC </td>
+    </tr>
+
+<div class="modal fade" id="items2FrontModal_4" tabindex="-1" role="dialog" aria-labelledby="items2FrontModalLabel_4">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="items2FrontModalLabel_4">2026 Topps #198 Boston Red Sox </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img loading="lazy" src="/Images/Cards/Baseball/585448/585448-33561326Fr.jpg" alt="2026 Topps #198 Boston Red Sox front" class="img-fluid">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+      <tr bgcolor="#fafafa"><td valign="top" nowrap="nowrap">5.</td>
+      <td width="13" valign="top" align="center"><input type="checkbox" class="form-check-input" onclick="toggle_highlight(this)" name="ItemID" value="33561397_931639969_ _ _ _ _ _ _1" /></td>
+      <td nowrap width="5">&nbsp;</td>
+      <td width="35"> 
+                    <div class="position-relative" style="width:25px;height:35px;">
+                        <img loading="lazy" src="/Images/Thumbs/Baseball/585448/585448_33561397Thumb.jpg" border="0" alt="image thumbnail" />
+                        <button type="button" aria-label="open front image modal" class="btn btn-mod-modal-open-overlay" data-bs-toggle="modal" data-bs-target="#items2FrontModal_5"></button>
+                    </div>
+                
+      </td>
+      <td nowrap width="5">&nbsp;</td>
+      <td>Baseball - <a href="/ViewCard.cfm/sid/585448/cid/33561397/2026-Topps-269-Marcelo-Mayer" target="_blank">2026 Topps #269 Marcelo Mayer - Boston Red Sox</a> FS </td>
+    </tr>
+
+<div class="modal fade" id="items2FrontModal_5" tabindex="-1" role="dialog" aria-labelledby="items2FrontModalLabel_5">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="items2FrontModalLabel_5">2026 Topps #269 Marcelo Mayer </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img loading="lazy" src="/Images/Cards/Baseball/585448/585448-33561397Fr.jpg" alt="2026 Topps #269 Marcelo Mayer front" class="img-fluid">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+      <tr bgcolor="#fafafa"><td valign="top" nowrap="nowrap">6.</td>
+      <td width="13" valign="top" align="center"><input type="checkbox" class="form-check-input" onclick="toggle_highlight(this)" name="ItemID" value="37831272_981009870_ _ _ _ _ _ _1" /></td>
+      <td nowrap width="5">&nbsp;</td>
+      <td width="35"> 
+                    <div class="position-relative" style="width:25px;height:35px;">
+                        <img loading="lazy" src="/Images/Thumbs/Baseball/585448/585448_37831272Thumb.jpg" border="0" alt="image thumbnail" />
+                        <button type="button" aria-label="open front image modal" class="btn btn-mod-modal-open-overlay" data-bs-toggle="modal" data-bs-target="#items2FrontModal_6"></button>
+                    </div>
+                
+      </td>
+      <td nowrap width="5">&nbsp;</td>
+      <td>Baseball - <a href="/ViewCard.cfm/sid/585448/cid/37831272/2026-Topps-536-Trevor-Story" target="_blank">2026 Topps #536 Trevor Story - Boston Red Sox</a> </td>
+    </tr>
+
+<div class="modal fade" id="items2FrontModal_6" tabindex="-1" role="dialog" aria-labelledby="items2FrontModalLabel_6">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="items2FrontModalLabel_6">2026 Topps #536 Trevor Story </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img loading="lazy" src="/Images/Cards/Baseball/585448/585448-37831272Fr.jpg" alt="2026 Topps #536 Trevor Story front" class="img-fluid">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+</table></p>
+      <p><strong>Add selected to:</strong></p>
+      <p><select name="TransactionID" class="form-select">
+    
+    <option value="Trade">New Trade Transaction</option>
+	</select></p>
+	<p><button type="submit" class="btn btn-primary btn-sm">Submit</button></p> </form>
+</td>
+</tr>
+</table>
+<script type="text/javascript">
+$('#select_all1').bind('click', function() {
+  var checkedState = this.checked;
+  $('#table1 :checkbox').each(function() {
+      this.checked = checkedState;
+  });
+});
+</script>
+<script type="text/javascript">
+$('#select_all2').bind('click', function() {
+  var checkedState = this.checked;
+  $('#table2 :checkbox').each(function() {
+      this.checked = checkedState;
+  });
+});
+</script>
+
+
+</div>
+</div></div>
+<div class="col-md-4 nopadding">
+
+<div class="d-none d-md-block">
+</div>
+</div>
+</div>
+<div id="bottomnav" class="row"><a name="Navigation" id="Navigation"></a>
+	<div class="col-md-2"><h3 class="bottomnav site">Account</h3><a href="/Collections.cfm/AxBolduc" class="bottomnav">Collection</a><br>
+<a href="/ForumSubscriptions.cfm" class="bottomnav">Forum Subscriptions</a><br>
+<a href="/Friends.cfm" class="bottomnav">Friends</a><br>
+<a href="/Goals.cfm" class="bottomnav">Goals</a><br>
+<a href="/YourLists.cfm" class="bottomnav">Lists</a><br>
+<a href="/Messages.cfm" class="bottomnav">Messages</a><br>
+<a href="/Permissions.cfm" class="bottomnav">Permissions</a><br>
+<a href="/Profile.cfm/AxBolduc" class="bottomnav">Profile</a><br>
+<a href="/YourPending.cfm" class="bottomnav">Queue</a><br>
+<a href="/YourRatings.cfm" class="bottomnav">Ratings</a><br>
+<a href="/SalesLinks.cfm/AxBolduc" class="bottomnav">Sales Links</a><br>
+<a href="/SavedPackRips.cfm" class="bottomnav">Saved Pack Rips</a><br>
+<a href="/YourSponsorships.cfm" class="bottomnav">Sponsorships</a><br>
+<a href="/YourTransactions.cfm" class="bottomnav">Transactions</a><div class="d-md-none"><hr /></div>
+</div>
+<div class="col-md-2"><h3 class="bottomnav site">Browse</h3>
+
+<a href="/ViewAll.cfm/sp/Baseball" class="bottomnav">Baseball</a><br>
+<a href="/ViewAll.cfm/sp/Basketball" class="bottomnav">Basketball</a><br>
+<a href="/ViewAll.cfm/sp/Boxing" class="bottomnav">Boxing</a><br>
+<a href="/ViewAll.cfm/sp/Cricket" class="bottomnav">Cricket</a><br>
+<a href="/ViewAll.cfm/sp/Football" class="bottomnav">Football</a><br>
+<a href="/ViewAll.cfm/sp/Gaming" class="bottomnav">Gaming</a><br>
+<a href="/ViewAll.cfm/sp/Golf" class="bottomnav">Golf</a><br>
+<a href="/ViewAll.cfm/sp/Hockey" class="bottomnav">Hockey</a><br>
+<a href="/ViewAll.cfm/sp/Misc Sports" class="bottomnav">Misc Sports</a><br>
+<a href="/ViewAll.cfm/sp/MMA" class="bottomnav">MMA</a><br>
+<a href="/ViewAll.cfm/sp/Multi-Sport" class="bottomnav">Multi-Sport</a><br>
+<a href="/ViewAll.cfm/sp/Non-Sport" class="bottomnav">Non-Sport</a><br>
+<a href="/ViewAll.cfm/sp/Racing" class="bottomnav">Racing</a><br>
+<a href="/ViewAll.cfm/sp/Soccer" class="bottomnav">Soccer</a><br>
+<a href="/ViewAll.cfm/sp/Tennis" class="bottomnav">Tennis</a><br>
+<a href="/ViewAll.cfm/sp/Wrestling" class="bottomnav">Wrestling</a><br>
+<div class="d-md-none"><hr /></div></div>
+<div class="col-md-2"><h3 class="bottomnav site">Features</h3><a href="/CardoftheDay.cfm" class="bottomnav">Card of the Day</a><br>
+<a href="/CompletedSets.cfm" class="bottomnav">Galleries</a><br>
+<a href="/Games.cfm" class="bottomnav">Games</a><br>
+<a href="/Polls.cfm" class="bottomnav">Poll of the Day</a><br>
+<a href="/RecentlyAdded.cfm" class="bottomnav">Recently Added</a><br>
+<a href="/RecentlyCollected.cfm" class="bottomnav">Recently Collected</a><br>
+<a href="/ImageSearch.cfm" class="bottomnav">Reverse Image Search</a><br>
+<a href="/PackRips.cfm" class="bottomnav">Rip a Pack</a><br>
+<a href="/SiteAwards.cfm" class="bottomnav">Site Awards</a><br>
+<a href="/Tags.cfm" class="bottomnav">Tagged</a><br>
+<a href="/ToDo.cfm" class="bottomnav">Things To Do</a><br>
+<a href="/TopMembers.cfm" class="bottomnav">Top Members</a><br>
+<a href="/TopSearches.cfm" class="bottomnav">Top Searches</a><br>
+<a href="/TopSets.cfm" class="bottomnav">Top Sets</a><br>
+<a href="/UserLists.cfm" class="bottomnav">User Lists</a><div class="d-md-none"><hr /></div></div>
+<div class="col-md-2"><h3 class="bottomnav site">Resources</h3>
+<a href="/HobbyArticles.cfm" class="bottomnav">Blogs</a><br>
+<a href="/CardCompanies.cfm" class="bottomnav">Card Companies</a><br>
+<a href="/CardShops.cfm" class="bottomnav">Card Shops</a><br>
+<a href="/CardShows.cfm" class="bottomnav">Card Shows</a><br>
+<a href="/Transactions.cfm" class="bottomnav">Completed Transactions</a><br>
+<a href="/Forums.cfm" class="bottomnav">Forums</a><br>
+<a href="/Glossary.cfm" class="bottomnav">Glossary</a><br>
+<a href="/Pricing.cfm" class="bottomnav">Pricing</a><br>
+<a href="/ReleaseDates.cfm" class="bottomnav">Release Dates</a><div class="d-md-none"><hr /></div></div>
+    <div class="col-md-2"><h3 class="bottomnav site">General Info</h3><a href="/AboutUs.cfm" class="bottomnav">About Us</a><br>
+<a href="/ChangeLog.cfm" class="bottomnav">Change Log</a><br>
+<a href="/ContactUs.cfm" class="bottomnav">Contact Us</a><br>
+<a href="/FAQ.cfm" class="bottomnav">FAQ</a><br>
+<a href="/Members.cfm" class="bottomnav">Member Directory</a><br>
+<a href="/PrivacyPolicy.cfm" class="bottomnav">Privacy Policy</a><br>
+<a href="/Sponsor.cfm" class="bottomnav">Sponsorships</a><br>
+<a href="/Stats.cfm" class="bottomnav">Stats</a><br>
+<a href="https://www.bonfire.com/store/trading-card-database-store/" target="_blank" class="bottomnav">Store</a><br>
+<a href="/Support.cfm" class="bottomnav">Support the Site</a><br>
+<a href="/TermsOfUse.cfm" class="bottomnav">Terms of Use</a><br>
+<a href="/Premium.cfm" class="bottomnav">Upgrade to Ad-Free</a><br>
+<a href="/UserManual.cfm" class="bottomnav">User Manual</a><div class="d-md-none"><hr /></div></div>
+<div class="col-md-2">
+<a href="https://www.youtube.com/channel/UCl5lNQpG-wUZfdefEB_HRjw/" target="_blank"><img src="/Images/LogoYT40.gif" border="0" title="YouTube" alt="YouTube logo" width="40" height="40" loading="lazy" /></a>&nbsp;&nbsp;
+<a href="http://www.facebook.com/pages/The-Trading-Card-Database/124883397553511" target="_blank"><img src="/Images/LogoFB40.gif" border="0" title="Facebook" alt="Facebook logo" width="40" height="40" loading="lazy" /></a>&nbsp;&nbsp;
+<a href="http://twitter.com/TradingCardDB" target="_blank"><img src="/Images/LogoX40.gif" border="0" title="X (Twitter)" alt="X logo" width="40" height="40" loading="lazy" /></a></div>
+</div>
+<div id="bottomnav" class="row"><div class="col-md-12">
+<p align="center"><font color="#FFFFFF">Copyright &copy; 2026  Trading Card Database LLC<br>
+Designated trademarks and brands are the property of their respective owners.</font></p></div>
+</div>
+
+</div>
+</div></body>
+
+</html>
