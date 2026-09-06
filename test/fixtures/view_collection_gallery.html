@@ -1,0 +1,706 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head><script type="text/javascript" src="/cf_scripts/scripts/cfform.js"></script>
+<script type="text/javascript" src="/cf_scripts/scripts/masks.js"></script>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+<title>Collection Gallery | Trading Card Database</title>
+
+<script language="JavaScript1.1">
+function makeHttpObject() {
+  try {return new XMLHttpRequest();}
+  catch (error) {}
+  try {return new ActiveXObject("Msxml2.XMLHTTP");}
+  catch (error) {}
+  try {return new ActiveXObject("Microsoft.XMLHTTP");}
+  catch (error) {}
+
+  throw new Error("Could not create HTTP request object.");
+}
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VGXS6LWKSL"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-VGXS6LWKSL');
+</script>
+
+<!-- Raptive Head Tag Manual -->
+<script data-no-optimize="1" data-cfasync="false">
+(function(w, d) {
+	w.adthrive = w.adthrive || {};
+	w.adthrive.cmd = w.
+	adthrive.cmd || [];
+	w.adthrive.plugin = 'adthrive-ads-manual';
+	w.adthrive.host = 'ads.adthrive.com';var s = d.createElement('script');
+	s.async = true;
+	s.referrerpolicy='no-referrer-when-downgrade';
+	s.src = 'https://' + w.adthrive.host + '/sites/6744c6004563c858d06c7252/ads.min.js?referrer=' + w.encodeURIComponent(w.location.href) + '&cb=' + (Math.floor(Math.random() * 100) + 1);
+	var n = d.getElementsByTagName('script')[0];
+	n.parentNode.insertBefore(s, n);
+})(window, document);
+</script>
+<!-- End of Raptive Head Tag -->
+<!-- START email detection/removal script -->
+   <script>
+   !function(){"use strict";function e(e){const t=e.match(/((?=([a-z0-9._!#$%+^&*()[\]<>-]+))\2@[a-z0-9._-]+\.[a-z0-9._-]+)/gi);return t?t[0]:""}function t(t){return e(a(t.toLowerCase()))}function a(e){return e.replace(/\s/g,"")}async function n(e){const t={sha256Hash:"",sha1Hash:""};if(!("msCrypto"in window)&&"https:"===location.protocol&&"crypto"in window&&"TextEncoder"in window){const a=(new TextEncoder).encode(e),[n,c]=await Promise.all([s("SHA-256",a),s("SHA-1",a)]);t.sha256Hash=n,t.sha1Hash=c}return t}async function s(e,t){const a=await crypto.subtle.digest(e,t);return Array.from(new Uint8Array(a)).map(e=>("00"+e.toString(16)).slice(-2)).join("")}function c(e){let t=!0;return Object.keys(e).forEach(a=>{0===e[a].length&&(t=!1)}),t}function i(e,t,a){e.splice(t,1);const n="?"+e.join("&")+a.hash;history.replaceState(null,"",n)}var o={checkEmail:e,validateEmail:t,trimInput:a,hashEmail:n,hasHashes:c,removeEmailAndReplaceHistory:i,detectEmails:async function(){const e=new URL(window.location.href),a=Array.from(e.searchParams.entries()).map(e=>`${e[0]}=${e[1]}`);let s,o;const r=["adt_eih","sh_kit"];if(a.forEach((e,t)=>{const a=decodeURIComponent(e),[n,c]=a.split("=");if("adt_ei"===n&&(s={value:c,index:t,emsrc:"url"}),r.includes(n)){o={value:c,index:t,emsrc:"sh_kit"===n?"urlhck":"urlh"}}}),s)t(s.value)&&n(s.value).then(e=>{if(c(e)){const t={value:e,created:Date.now()};localStorage.setItem("adt_ei",JSON.stringify(t)),localStorage.setItem("adt_emsrc",s.emsrc)}});else if(o){const e={value:{sha256Hash:o.value,sha1Hash:""},created:Date.now()};localStorage.setItem("adt_ei",JSON.stringify(e)),localStorage.setItem("adt_emsrc",o.emsrc)}s&&i(a,s.index,e),o&&i(a,o.index,e)},cb:"adthrive"};const{detectEmails:r,cb:l}=o;r()}();
+   </script>
+<!-- END email detection/removal script -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<link href="/fontawesome/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/default6.css">
+<script type="text/javascript">
+<!--
+    _CF_checkCFForm_1 = function(_CF_this)
+    {
+        //reset on submit
+        _CF_error_exists = false;
+        _CF_error_messages = new Array();
+        _CF_error_fields = new Object();
+        _CF_FirstErrorField = null;
+
+
+        //display error messages and return success
+        if( _CF_error_exists )
+        {
+            if( _CF_error_messages.length > 0 )
+            {
+                // show alert() message
+                _CF_onErrorAlert(_CF_error_messages);
+                // set focus to first form error, if the field supports js focus().
+                if( _CF_this[_CF_FirstErrorField].type == "text" )
+                { _CF_this[_CF_FirstErrorField].focus(); }
+
+            }
+            return false;
+        }else {
+            return true;
+        }
+    }
+//-->
+</script>
+<script type="text/javascript">
+<!--
+    _CF_checkCFForm_2 = function(_CF_this)
+    {
+        //reset on submit
+        _CF_error_exists = false;
+        _CF_error_messages = new Array();
+        _CF_error_fields = new Object();
+        _CF_FirstErrorField = null;
+
+
+        //display error messages and return success
+        if( _CF_error_exists )
+        {
+            if( _CF_error_messages.length > 0 )
+            {
+                // show alert() message
+                _CF_onErrorAlert(_CF_error_messages);
+                // set focus to first form error, if the field supports js focus().
+                if( _CF_this[_CF_FirstErrorField].type == "text" )
+                { _CF_this[_CF_FirstErrorField].focus(); }
+
+            }
+            return false;
+        }else {
+            return true;
+        }
+    }
+//-->
+</script>
+</head>
+
+<body>
+<div class="container-lg">
+<div id="topnav" class="row">
+  <div class="col-md-3"><div class="d-none d-sm-block"><div align="center"><a href="/"><img src="/Images/TCDbLogo.gif" border="0" class="img-fluid" alt="TCDb logo" width="225" height="90"></a></div></div><div class="d-block d-sm-none"><table cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td width="100" align="center"><a href="/"><img src="/Images/TCDbLogo.gif" border="0" width="125" class="img-fluid" alt="TCDb logo"></a></td></tr></table></div></div>
+  <div class="col-md-9">
+  	<div class="row">
+    	<div class="col-sm-12">
+        	<table border="0" width="100%" height="90" bordercolor="#000000" cellpadding="0" cellspacing="0" align="center">
+            <tr>
+            <td bgcolor="#C6491A">
+            <div align="center"></div></td>
+            </tr></table>
+            </div>
+    	</div>
+  </div>
+</div>
+<div id="topnav" class="row"><div class="col-12">
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span> 
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown">
+	  	<a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Browse
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+			<a href="/ViewAll.cfm/sp/Baseball" class="dropdown-item">Baseball</a>
+			<a href="/ViewAll.cfm/sp/Basketball" class="dropdown-item">Basketball</a>
+			<a href="/ViewAll.cfm/sp/Boxing" class="dropdown-item">Boxing</a>
+			<a href="/ViewAll.cfm/sp/Cricket" class="dropdown-item">Cricket</a>
+			<a href="/ViewAll.cfm/sp/Football" class="dropdown-item">Football</a>
+			<a href="/ViewAll.cfm/sp/Gaming" class="dropdown-item">Gaming</a>
+			<a href="/ViewAll.cfm/sp/Golf" class="dropdown-item">Golf</a>
+			<a href="/ViewAll.cfm/sp/Hockey" class="dropdown-item">Hockey</a>
+			<a href="/ViewAll.cfm/sp/Misc Sports" class="dropdown-item">Misc Sports</a>
+			<a href="/ViewAll.cfm/sp/MMA" class="dropdown-item">MMA</a>
+			<a href="/ViewAll.cfm/sp/Multi-Sport" class="dropdown-item">Multi-Sport</a>
+			<a href="/ViewAll.cfm/sp/Non-Sport" class="dropdown-item">Non-Sport</a>
+			<a href="/ViewAll.cfm/sp/Racing" class="dropdown-item">Racing</a>
+			<a href="/ViewAll.cfm/sp/Soccer" class="dropdown-item">Soccer</a>
+			<a href="/ViewAll.cfm/sp/Tennis" class="dropdown-item">Tennis</a>
+			<a href="/ViewAll.cfm/sp/Wrestling" class="dropdown-item">Wrestling</a>
+        </ul>
+      </li>
+      <li class="nav-item"><a class="nav-link active" href="#Navigation">More <i class="fa fa-circle-chevron-down"></i></a></li>
+    </ul>
+	<div class="mx-auto">
+  <form class="navbar-form navbar-left" role="search" action="/Search.cfm" id="cse-search-box" novalidate="true" data-username="AxBolduc"><div class="form-group">
+        <table border="0" cellpadding="0" cellspacing="0" align="center">
+        <tr><td>
+		<select name="SearchCategory" size="1" class="form-select" style="min-width: 120px;">
+        
+        <option value="Baseball" selected>Baseball</option>
+        <option value="Basketball" >Basketball</option>
+        <option value="Boxing" >Boxing</option>
+        <option value="Cricket" >Cricket</option>
+        <option value="Football" >Football</option>
+        <option value="Gaming" >Gaming</option>
+        <option value="Golf" >Golf</option>
+        <option value="Hockey" >Hockey</option>
+        <option value="Misc Sports" >Misc Sports</option>
+        <option value="MMA" >MMA</option>
+        <option value="Multi-Sport" >Multi-Sport</option>
+        <option value="Non-Sport" >Non-Sport</option>
+        <option value="Racing" >Racing</option>
+        <option value="Soccer" >Soccer</option>
+        <option value="Tennis" >Tennis</option>
+        <option value="Wrestling" >Wrestling</option>
+        </select>
+      </td><td width="2">&nbsp;</td>
+      <td><input type="hidden" name="cx" value="partner-pub-2387250451295121:hes0ib-44xp" />
+        <input type="hidden" name="cof" value="FORID:10" />
+        <input type="hidden" name="ie" value="ISO-8859-1" />
+		<input name="q" type="text" class="form-control mr-sm-2" placeholder="Search" size="45" autocomplete="on" aria-expanded="false" required="true"></td><td width="2">&nbsp;</td>
+      <td class="d-none d-sm-block"><button type="submit" class="btn btn-primary my-2 my-sm-0">Search</button></td><td width="2">&nbsp;</td>
+	  <td class="d-none d-md-table-cell"><figcaption class="figure-caption"><a class="link-light text-white" href="/AdvancedSearch.cfm">Advanced</a></figcaption></td>
+      </tr></table></div></form></div>
+	  <ul class="navbar-nav ml-auto d-md-none"><li class="nav-item"><figcaption class="figure-caption"><a class="link-light text-white" href="/AdvancedSearch.cfm">Advanced Search</a></figcaption></li></ul>
+      <ul class="navbar-nav ml-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="fa fa-user"></i> AxBolduc
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+        	<h6 class="dropdown-header">Rookie</h6>
+            <a href="/Collections.cfm/AxBolduc" class="dropdown-item">Collection</a>
+			<a href="/CollectionManager.cfm" class="dropdown-item">Collection (New)</a>
+            <a href="/Messages.cfm" class="dropdown-item">Messages</a>
+<a href="/Profile.cfm/AxBolduc" class="dropdown-item">Profile</a>
+            <a href="/YourTransactions.cfm" class="dropdown-item">Transactions</a>
+            <a href="/LogOff.cfm" class="dropdown-item">Logout</a>
+        </ul>
+      </li>
+      </ul>
+      </div>
+</nav></div></div>
+
+<script src="/js/search-autocomplete.js"></script>
+<div id="content" class="row">
+<div class="col-md-8 nopadding">
+<div class="block1">
+<nav aria-label="breadcrumb">
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="/"><i class="fa-solid fa-house" title="Homepage"></i></a></li>
+  <li class="breadcrumb-item"><a href="/Profile.cfm/AxBolduc">Profile</a></li>
+  <li class="breadcrumb-item"><a href="/Collections.cfm/AxBolduc">Collections</a></li>
+  <li class="breadcrumb-item"><a href="/Collection.cfm/member/AxBolduc/collection/1">Main Collection</a></li>
+  <li class="breadcrumb-item active" aria-current="page">Gallery</li>
+</ol></nav> 
+<table cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td valign="top" width="45"><a href="/Profile.cfm/AxBolduc"><img loading="lazy" src="/Images/Profiles/me.jpeg" width="45" border="0" class="img-thumbnail"></a></td><td nowrap width="5">&nbsp;</td><td valign="top"><a href="/Collection.cfm/AxBolduc" style="text-decoration:none"><h1 class="site">AxBolduc's Collection</h1></a></td><td align="right"><a href="/BrowseC.cfm?CollectionID=1"><button type="button" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Add</button></a></td>
+</tr></table>
+<p><ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link" href="/Collection.cfm/member/AxBolduc/collection/1">Overview</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link active" href="/ViewCollectionMode.cfm?Member=AxBolduc&CollectionID=1&Filter=G">Cards</a>
+  </li>
+  
+  <li class="nav-item">
+    <a class="nav-link" href="/Collection.cfm/member/AxBolduc/collection/1?MODE=REPORTS">Reports</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/Collection.cfm/member/AxBolduc/collection/1?MODE=TOOLS">Tools</a>
+  </li>
+</ul></p>
+<p>Baseball | <a href="/CollectionModeGallery.cfm?Member=AxBolduc&CollectionID=1&MODE=&Filter=O&Type=Basketball">Basketball</a> | <a href="/CollectionModeGallery.cfm?Member=AxBolduc&CollectionID=1&MODE=&Filter=O&Type=Boxing">Boxing</a> | <a href="/CollectionModeGallery.cfm?Member=AxBolduc&CollectionID=1&MODE=&Filter=O&Type=Cricket">Cricket</a> | <a href="/CollectionModeGallery.cfm?Member=AxBolduc&CollectionID=1&MODE=&Filter=O&Type=Football">Football</a> | <a href="/CollectionModeGallery.cfm?Member=AxBolduc&CollectionID=1&MODE=&Filter=O&Type=Gaming">Gaming</a> | <a href="/CollectionModeGallery.cfm?Member=AxBolduc&CollectionID=1&MODE=&Filter=O&Type=Golf">Golf</a> | <a href="/CollectionModeGallery.cfm?Member=AxBolduc&CollectionID=1&MODE=&Filter=O&Type=Hockey">Hockey</a> | <a href="/CollectionModeGallery.cfm?Member=AxBolduc&CollectionID=1&MODE=&Filter=O&Type=Misc Sports">Misc Sports</a> | <a href="/CollectionModeGallery.cfm?Member=AxBolduc&CollectionID=1&MODE=&Filter=O&Type=MMA">MMA</a> | <a href="/CollectionModeGallery.cfm?Member=AxBolduc&CollectionID=1&MODE=&Filter=O&Type=Multi-Sport">Multi-Sport</a> | <a href="/CollectionModeGallery.cfm?Member=AxBolduc&CollectionID=1&MODE=&Filter=O&Type=Non-Sport">Non-Sport</a> | <a href="/CollectionModeGallery.cfm?Member=AxBolduc&CollectionID=1&MODE=&Filter=O&Type=Racing">Racing</a> | <a href="/CollectionModeGallery.cfm?Member=AxBolduc&CollectionID=1&MODE=&Filter=O&Type=Soccer">Soccer</a> | <a href="/CollectionModeGallery.cfm?Member=AxBolduc&CollectionID=1&MODE=&Filter=O&Type=Tennis">Tennis</a> | <a href="/CollectionModeGallery.cfm?Member=AxBolduc&CollectionID=1&MODE=&Filter=O&Type=Wrestling">Wrestling</a></p> <hr>
+  <p><table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>
+	
+	<div class="dropdown">
+	  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+		Cards - Baseball
+	  </button>
+	  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+		<li><a class="dropdown-item" href="/CollectionModeGallery.cfm?Member=AxBolduc&CollectionID=1&Type=Baseball&Filter=O">All Cards</a></li>
+		<li><a class="dropdown-item" href="/CollectionModeGallery.cfm?Member=AxBolduc&CollectionID=1&MODE=AU&Type=Baseball&Filter=O">Autographed Cards</a></li>
+		<li><a class="dropdown-item" href="/CollectionModeGallery.cfm?Member=AxBolduc&CollectionID=1&MODE=GRADED&Type=Baseball&Filter=G">Graded Cards</a></li>
+		<li><a class="dropdown-item" href="/CollectionModeGallery.cfm?Member=AxBolduc&CollectionID=1&MODE=HOF&Type=Baseball&Filter=G">Hall of Famer Cards</a></li>
+		<li><a class="dropdown-item" href="/CollectionModeGallery.cfm?Member=AxBolduc&CollectionID=1&MODE=MANU&Type=Baseball&Filter=G">Manufactured Patch Cards</a></li>
+		<li><a class="dropdown-item" href="/CollectionModeGallery.cfm?Member=AxBolduc&CollectionID=1&MODE=MEM&Type=Baseball&Filter=G">Memorabilia Cards</a></li>
+		<li><a class="dropdown-item" href="/CollectionModeGallery.cfm?Member=AxBolduc&CollectionID=1&MODE=RC&Type=Baseball&Filter=G">Rookie Cards</a></li>
+		<li><a class="dropdown-item" href="/CollectionModeGallery.cfm?Member=AxBolduc&CollectionID=1&MODE=RCHOF&Type=Baseball&Filter=G">Rookie Cards of Hall of Famers</a></li>
+		<li><a class="dropdown-item" href="/CollectionModeGallery.cfm?Member=AxBolduc&CollectionID=1&MODE=SN&Type=Baseball&Filter=G">Serial Numbered Cards</a></li>
+	  </ul>
+	</div>
+	</td><td align="right"><form name="CFForm_1" id="CFForm_1" action="/CollectionModeGallery.cfm?Member=AxBolduc&MODE=&Type=Baseball&CollectionID=1" method="post" onsubmit="return _CF_checkCFForm_1(this)">
+  <select name="Filter" size="1" onChange="submit(); return true">
+      <option value="" >All</option>
+      <option value="G" >Haves</option>
+      <option value="W" >Wants</option>
+      <option value="S" >For Sale/Trade</option>
+      <option value="T" >In-Transaction</option>
+      <option value="I" >In-Transit (Inbound)</option>
+	  <option value="O" selected>In-Transit (Outbound)</option>
+  </select></form>
+
+  </td>
+  </tr>
+</table> 
+  	<p><nav aria-label="Page navigation">
+          <ul class="pagination justify-content-center flex-wrap">
+      
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                  
+                    <li class="page-item"><a class="page-link" href="?Filter=O&Member=AxBolduc&MODE=&Type=Baseball&CollectionID=1&PageIndex=2" >2</a></li>
+                  <li class="page-item"><a class="page-link" href="?Filter=O&Member=AxBolduc&MODE=&Type=Baseball&CollectionID=1&PageIndex=2">&rsaquo;</a></li>
+    <li class="page-item"><a class="page-link" href="?Filter=O&Member=AxBolduc&MODE=&Type=Baseball&CollectionID=1&PageIndex=2">&raquo;</a></li>  
+            </ul>
+            </nav></p>
+          
+	<p><table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>20 record(s)</td>
+	<td align="right"><a href="/ViewCollectionMode.cfm?Member=AxBolduc&MODE=&Type=Baseball&CollectionID=1&Filter=O">List</a> | Gallery</td>
+  </tr>
+</table></p> 
+          <p><table border="1" bordercolor="D2D2D2" class="table">
+          <tr bgcolor="#F7F9F9">
+          <td colspan="2"><h3 class="site" align="center">2024 Topps <a href="/ViewCard.cfm/sid/404413/cid/23860991/2024-Topps-90-Oneil-Cruz" style="text-decoration:none">#90</a> <a href="/Person.cfm/pid/282513/Oneil-Cruz" style="text-decoration:none">Oneil Cruz</a> <font size="2"><em></em></font> - <a href="/Team.cfm/tid/22/Pittsburgh-Pirates" style="text-decoration:none">Pittsburgh Pirates</a></h3>
+             <div align="center"><strong> $0.20</strong>
+             </div></td>
+          </tr>
+            <tr bgcolor="#F7F9F9">
+              <td><div class="row"><div class="col-sm-6"><div align="center">
+                  
+                          <a href="/ViewCard.cfm/sid/404413/cid/23860991/2024-Topps-90-Oneil-Cruz" style="text-decoration:none">
+                              
+                                  <img loading="lazy" src="/Images/Cards/Baseball/404413/404413-23860991Fr.jpg" alt="2024 Topps #90 Oneil Cruz Front" border="0" class="img-fluid">
+                              
+                          </a>
+                      
+                </div></div>
+                <div class="col-sm-6"><div class="d-block d-sm-none"><br></div><div align="center">
+                  
+                          <a href="/ViewCard.cfm/sid/404413/cid/23860991/2024-Topps-90-Oneil-Cruz" style="text-decoration:none">
+                              
+                                  <img loading="lazy" src="/Images/Cards/Baseball/404413/404413-23860991Bk.jpg" alt="2024 Topps #90 Oneil Cruz Back" border="0" class="img-fluid">
+                              
+                          </a>
+                      
+                </div></div></div></td>
+            </tr>
+
+          </table></p>
+
+          <p><table border="1" bordercolor="D2D2D2" class="table">
+          <tr bgcolor="#EAEEEE">
+          <td colspan="2"><h3 class="site" align="center">2024 Topps <a href="/ViewCard.cfm/sid/404413/cid/23861011/2024-Topps-110-Zac-Gallen" style="text-decoration:none">#110</a> <a href="/Person.cfm/pid/148701/Zac-Gallen" style="text-decoration:none">Zac Gallen</a> <font size="2"><em></em></font> - <a href="/Team.cfm/tid/1/Arizona-Diamondbacks" style="text-decoration:none">Arizona Diamondbacks</a></h3>
+             <div align="center"><strong> $0.20</strong>
+             </div></td>
+          </tr>
+            <tr bgcolor="#EAEEEE">
+              <td><div class="row"><div class="col-sm-6"><div align="center">
+                  
+                          <a href="/ViewCard.cfm/sid/404413/cid/23861011/2024-Topps-110-Zac-Gallen" style="text-decoration:none">
+                              
+                                  <img loading="lazy" src="/Images/Cards/Baseball/404413/404413-23861011Fr.jpg" alt="2024 Topps #110 Zac Gallen Front" border="0" class="img-fluid">
+                              
+                          </a>
+                      
+                </div></div>
+                <div class="col-sm-6"><div class="d-block d-sm-none"><br></div><div align="center">
+                  
+                          <a href="/ViewCard.cfm/sid/404413/cid/23861011/2024-Topps-110-Zac-Gallen" style="text-decoration:none">
+                              
+                                  <img loading="lazy" src="/Images/Cards/Baseball/404413/404413-23861011Bk.jpg" alt="2024 Topps #110 Zac Gallen Back" border="0" class="img-fluid">
+                              
+                          </a>
+                      
+                </div></div></div></td>
+            </tr>
+
+          </table></p>
+
+          <p><table border="1" bordercolor="D2D2D2" class="table">
+          <tr bgcolor="#F7F9F9">
+          <td colspan="2"><h3 class="site" align="center">2024 Topps <a href="/ViewCard.cfm/sid/404413/cid/23861036/2024-Topps-135-Devin-Williams" style="text-decoration:none">#135</a> <a href="/Person.cfm/pid/49336/Devin-Williams" style="text-decoration:none">Devin Williams</a> <font size="2"><em></em></font> - <a href="/Team.cfm/tid/16/Milwaukee-Brewers" style="text-decoration:none">Milwaukee Brewers</a></h3>
+             <div align="center"><strong> $0.05</strong>
+             </div></td>
+          </tr>
+            <tr bgcolor="#F7F9F9">
+              <td><div class="row"><div class="col-sm-6"><div align="center">
+                  
+                          <a href="/ViewCard.cfm/sid/404413/cid/23861036/2024-Topps-135-Devin-Williams" style="text-decoration:none">
+                              
+                                  <img loading="lazy" src="/Images/Cards/Baseball/404413/404413-23861036Fr.jpg" alt="2024 Topps #135 Devin Williams Front" border="0" class="img-fluid">
+                              
+                          </a>
+                      
+                </div></div>
+                <div class="col-sm-6"><div class="d-block d-sm-none"><br></div><div align="center">
+                  
+                          <a href="/ViewCard.cfm/sid/404413/cid/23861036/2024-Topps-135-Devin-Williams" style="text-decoration:none">
+                              
+                                  <img loading="lazy" src="/Images/Cards/Baseball/404413/404413-23861036Bk.jpg" alt="2024 Topps #135 Devin Williams Back" border="0" class="img-fluid">
+                              
+                          </a>
+                      
+                </div></div></div></td>
+            </tr>
+
+          </table></p>
+
+          <p><table border="1" bordercolor="D2D2D2" class="table">
+          <tr bgcolor="#EAEEEE">
+          <td colspan="2"><h3 class="site" align="center">2024 Topps <a href="/ViewCard.cfm/sid/404413/cid/23861231/2024-Topps-330-Vladimir-Guerrero-Jr." style="text-decoration:none">#330</a> <a href="/Person.cfm/pid/91464/Vladimir-Guerrero-Jr." style="text-decoration:none">Vladimir Guerrero Jr.</a> <font size="2"><em></em></font> - <a href="/Team.cfm/tid/29/Toronto-Blue-Jays" style="text-decoration:none">Toronto Blue Jays</a></h3>
+             <div align="center"><strong> $0.20</strong>
+             </div></td>
+          </tr>
+            <tr bgcolor="#EAEEEE">
+              <td><div class="row"><div class="col-sm-6"><div align="center">
+                  
+                          <a href="/ViewCard.cfm/sid/404413/cid/23861231/2024-Topps-330-Vladimir-Guerrero-Jr." style="text-decoration:none">
+                              
+                                  <img loading="lazy" src="/Images/Cards/Baseball/404413/404413-23861231Fr.jpg" alt="2024 Topps #330 Vladimir Guerrero Jr. Front" border="0" class="img-fluid">
+                              
+                          </a>
+                      
+                </div></div>
+                <div class="col-sm-6"><div class="d-block d-sm-none"><br></div><div align="center">
+                  
+                          <a href="/ViewCard.cfm/sid/404413/cid/23861231/2024-Topps-330-Vladimir-Guerrero-Jr." style="text-decoration:none">
+                              
+                                  <img loading="lazy" src="/Images/Cards/Baseball/404413/404413-23861231Bk.jpg" alt="2024 Topps #330 Vladimir Guerrero Jr. Back" border="0" class="img-fluid">
+                              
+                          </a>
+                      
+                </div></div></div></td>
+            </tr>
+
+          </table></p>
+
+          <p><table border="1" bordercolor="D2D2D2" class="table">
+          <tr bgcolor="#F7F9F9">
+          <td colspan="2"><h3 class="site" align="center">2026 Topps Chrome <a href="/ViewCard.cfm/sid/654047/cid/38487089/2026-Topps-Chrome-18-Dillon-Dingler" style="text-decoration:none">#18</a> <a href="/Person.cfm/pid/274640/Dillon-Dingler" style="text-decoration:none">Dillon Dingler</a> <font size="2"><em></em></font> - <a href="/Team.cfm/tid/10/Detroit-Tigers" style="text-decoration:none">Detroit Tigers</a></h3>
+             <div align="center"><strong> $0.20</strong>
+             </div></td>
+          </tr>
+            <tr bgcolor="#F7F9F9">
+              <td><div class="row"><div class="col-sm-6"><div align="center">
+                  
+                          <a href="/ViewCard.cfm/sid/654047/cid/38487089/2026-Topps-Chrome-18-Dillon-Dingler" style="text-decoration:none">
+                              
+                                  <img loading="lazy" src="/Images/Cards/Baseball/654047/654047-38487089Fr.jpg" alt="2026 Topps Chrome #18 Dillon Dingler Front" border="0" class="img-fluid">
+                              
+                          </a>
+                      
+                </div></div>
+                <div class="col-sm-6"><div class="d-block d-sm-none"><br></div><div align="center">
+                  
+                          <a href="/ViewCard.cfm/sid/654047/cid/38487089/2026-Topps-Chrome-18-Dillon-Dingler" style="text-decoration:none">
+                              
+                                  <img loading="lazy" src="/Images/Cards/Baseball/654047/654047-38487089Bk.jpg" alt="2026 Topps Chrome #18 Dillon Dingler Back" border="0" class="img-fluid">
+                              
+                          </a>
+                      
+                </div></div></div></td>
+            </tr>
+
+          </table></p>
+
+          <p><table border="1" bordercolor="D2D2D2" class="table">
+          <tr bgcolor="#EAEEEE">
+          <td colspan="2"><h3 class="site" align="center">2026 Topps Chrome <a href="/ViewCard.cfm/sid/654047/cid/38487096/2026-Topps-Chrome-25-J.P.-Crawford" style="text-decoration:none">#25</a> <a href="/Person.cfm/pid/49207/J.P.-Crawford" style="text-decoration:none">J.P. Crawford</a> <font size="2"><em></em></font> - <a href="/Team.cfm/tid/25/Seattle-Mariners" style="text-decoration:none">Seattle Mariners</a></h3>
+             <div align="center"><strong> $0.42</strong>
+             </div></td>
+          </tr>
+            <tr bgcolor="#EAEEEE">
+              <td><div class="row"><div class="col-sm-6"><div align="center">
+                  
+                          <a href="/ViewCard.cfm/sid/654047/cid/38487096/2026-Topps-Chrome-25-J.P.-Crawford" style="text-decoration:none">
+                              
+                                  <img loading="lazy" src="/Images/Cards/Baseball/654047/654047-38487096Fr.jpg" alt="2026 Topps Chrome #25 J.P. Crawford Front" border="0" class="img-fluid">
+                              
+                          </a>
+                      
+                </div></div>
+                <div class="col-sm-6"><div class="d-block d-sm-none"><br></div><div align="center">
+                  
+                          <a href="/ViewCard.cfm/sid/654047/cid/38487096/2026-Topps-Chrome-25-J.P.-Crawford" style="text-decoration:none">
+                              
+                                  <img loading="lazy" src="/Images/Cards/Baseball/654047/654047-38487096Bk.jpg" alt="2026 Topps Chrome #25 J.P. Crawford Back" border="0" class="img-fluid">
+                              
+                          </a>
+                      
+                </div></div></div></td>
+            </tr>
+
+          </table></p>
+
+          <p><table border="1" bordercolor="D2D2D2" class="table">
+          <tr bgcolor="#F7F9F9">
+          <td colspan="2"><h3 class="site" align="center">2026 Topps Chrome <a href="/ViewCard.cfm/sid/654047/cid/38487150/2026-Topps-Chrome-79-Trent-Grisham" style="text-decoration:none">#79</a> <a href="/Person.cfm/pid/75093/Trent-Grisham" style="text-decoration:none">Trent Grisham</a> <font size="2"><em></em></font> - <a href="/Team.cfm/tid/19/New-York-Yankees" style="text-decoration:none">New York Yankees</a></h3>
+             <div align="center"><strong> $0.20</strong>
+             </div></td>
+          </tr>
+            <tr bgcolor="#F7F9F9">
+              <td><div class="row"><div class="col-sm-6"><div align="center">
+                  
+                          <a href="/ViewCard.cfm/sid/654047/cid/38487150/2026-Topps-Chrome-79-Trent-Grisham" style="text-decoration:none">
+                              
+                                  <img loading="lazy" src="/Images/Cards/Baseball/654047/654047-38487150Fr.jpg" alt="2026 Topps Chrome #79 Trent Grisham Front" border="0" class="img-fluid">
+                              
+                          </a>
+                      
+                </div></div>
+                <div class="col-sm-6"><div class="d-block d-sm-none"><br></div><div align="center">
+                  
+                          <a href="/ViewCard.cfm/sid/654047/cid/38487150/2026-Topps-Chrome-79-Trent-Grisham" style="text-decoration:none">
+                              
+                                  <img loading="lazy" src="/Images/Cards/Baseball/654047/654047-38487150Bk.jpg" alt="2026 Topps Chrome #79 Trent Grisham Back" border="0" class="img-fluid">
+                              
+                          </a>
+                      
+                </div></div></div></td>
+            </tr>
+
+          </table></p>
+
+          <p><table border="1" bordercolor="D2D2D2" class="table">
+          <tr bgcolor="#EAEEEE">
+          <td colspan="2"><h3 class="site" align="center">2026 Topps Chrome <a href="/ViewCard.cfm/sid/654047/cid/38487204/2026-Topps-Chrome-133-Justin-Verlander" style="text-decoration:none">#133</a> <a href="/Person.cfm/pid/6056/Justin-Verlander" style="text-decoration:none">Justin Verlander</a> <font size="2"><em></em></font> - <a href="/Team.cfm/tid/10/Detroit-Tigers" style="text-decoration:none">Detroit Tigers</a></h3>
+             <div align="center"><strong> $0.20</strong>
+             </div></td>
+          </tr>
+            <tr bgcolor="#EAEEEE">
+              <td><div class="row"><div class="col-sm-6"><div align="center">
+                  
+                          <a href="/ViewCard.cfm/sid/654047/cid/38487204/2026-Topps-Chrome-133-Justin-Verlander" style="text-decoration:none">
+                              
+                                  <img loading="lazy" src="/Images/Cards/Baseball/654047/654047-38487204Fr.jpg" alt="2026 Topps Chrome #133 Justin Verlander Front" border="0" class="img-fluid">
+                              
+                          </a>
+                      
+                </div></div>
+                <div class="col-sm-6"><div class="d-block d-sm-none"><br></div><div align="center">
+                  
+                          <a href="/ViewCard.cfm/sid/654047/cid/38487204/2026-Topps-Chrome-133-Justin-Verlander" style="text-decoration:none">
+                              
+                                  <img loading="lazy" src="/Images/Cards/Baseball/654047/654047-38487204Bk.jpg" alt="2026 Topps Chrome #133 Justin Verlander Back" border="0" class="img-fluid">
+                              
+                          </a>
+                      
+                </div></div></div></td>
+            </tr>
+
+          </table></p>
+
+          <p><table border="1" bordercolor="D2D2D2" class="table">
+          <tr bgcolor="#F7F9F9">
+          <td colspan="2"><h3 class="site" align="center">2026 Topps Chrome <a href="/ViewCard.cfm/sid/654047/cid/38487238/2026-Topps-Chrome-167-Will-Banfield" style="text-decoration:none">#167</a> <a href="/Person.cfm/pid/182079/Will-Banfield" style="text-decoration:none">Will Banfield</a> <font size="2"><em>RC</em></font> - <a href="/Team.cfm/tid/7/Cincinnati-Reds" style="text-decoration:none">Cincinnati Reds</a></h3>
+             <div align="center"><strong> $0.20</strong>
+             </div></td>
+          </tr>
+            <tr bgcolor="#F7F9F9">
+              <td><div class="row"><div class="col-sm-6"><div align="center">
+                  
+                          <a href="/ViewCard.cfm/sid/654047/cid/38487238/2026-Topps-Chrome-167-Will-Banfield" style="text-decoration:none">
+                              
+                                  <img loading="lazy" src="/Images/Cards/Baseball/654047/654047-38487238Fr.jpg" alt="2026 Topps Chrome #167 Will Banfield Front" border="0" class="img-fluid">
+                              
+                          </a>
+                      
+                </div></div>
+                <div class="col-sm-6"><div class="d-block d-sm-none"><br></div><div align="center">
+                  
+                          <a href="/ViewCard.cfm/sid/654047/cid/38487238/2026-Topps-Chrome-167-Will-Banfield" style="text-decoration:none">
+                              
+                                  <img loading="lazy" src="/Images/Cards/Baseball/654047/654047-38487238Bk.jpg" alt="2026 Topps Chrome #167 Will Banfield Back" border="0" class="img-fluid">
+                              
+                          </a>
+                      
+                </div></div></div></td>
+            </tr>
+
+          </table></p>
+
+          <p><table border="1" bordercolor="D2D2D2" class="table">
+          <tr bgcolor="#EAEEEE">
+          <td colspan="2"><h3 class="site" align="center">2026 Topps Chrome <a href="/ViewCard.cfm/sid/654047/cid/38487239/2026-Topps-Chrome-168-Luis-Arraez" style="text-decoration:none">#168</a> <a href="/Person.cfm/pid/140043/Luis-Arraez" style="text-decoration:none">Luis Arraez</a> <font size="2"><em></em></font> - <a href="/Team.cfm/tid/24/San-Francisco-Giants" style="text-decoration:none">San Francisco Giants</a></h3>
+             <div align="center"><strong> $0.20</strong>
+             </div></td>
+          </tr>
+            <tr bgcolor="#EAEEEE">
+              <td><div class="row"><div class="col-sm-6"><div align="center">
+                  
+                          <a href="/ViewCard.cfm/sid/654047/cid/38487239/2026-Topps-Chrome-168-Luis-Arraez" style="text-decoration:none">
+                              
+                                  <img loading="lazy" src="/Images/Cards/Baseball/654047/654047-38487239Fr.jpg" alt="2026 Topps Chrome #168 Luis Arraez Front" border="0" class="img-fluid">
+                              
+                          </a>
+                      
+                </div></div>
+                <div class="col-sm-6"><div class="d-block d-sm-none"><br></div><div align="center">
+                  
+                          <a href="/ViewCard.cfm/sid/654047/cid/38487239/2026-Topps-Chrome-168-Luis-Arraez" style="text-decoration:none">
+                              
+                                  <img loading="lazy" src="/Images/Cards/Baseball/654047/654047-38487239Bk.jpg" alt="2026 Topps Chrome #168 Luis Arraez Back" border="0" class="img-fluid">
+                              
+                          </a>
+                      
+                </div></div></div></td>
+            </tr>
+
+          </table></p>
+
+  	<div align="center">
+        <nav aria-label="Page navigation">
+          <ul class="pagination justify-content-center flex-wrap">
+      
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                  
+                    <li class="page-item"><a class="page-link" href="?Filter=O&Member=AxBolduc&MODE=&Type=Baseball&CollectionID=1&PageIndex=2" >2</a></li>
+                  <li class="page-item"><a class="page-link" href="?Filter=O&Member=AxBolduc&MODE=&Type=Baseball&CollectionID=1&PageIndex=2">&rsaquo;</a></li>
+    <li class="page-item"><a class="page-link" href="?Filter=O&Member=AxBolduc&MODE=&Type=Baseball&CollectionID=1&PageIndex=2">&raquo;</a></li>  
+            </ul>
+            </nav>
+            <p><form name="CFForm_2" id="CFForm_2" action="?Filter=O&Member=AxBolduc&MODE=&Type=Baseball&CollectionID=1" method="post" onsubmit="return _CF_checkCFForm_2(this)">
+                Page: <input name="PageIndex" id="PageIndex"  type="text" value="1" maxlength="6"  size="3"  /> <input name="Submit" type="submit" value="Go" validate="submitonce">
+                </form>
+</p>
+        </div>
+        
+</p>
+</div>
+</div>
+<div class="col-md-4 nopadding">
+
+<div class="d-none d-md-block">
+</div>
+</div>
+</div>
+<div id="bottomnav" class="row"><a name="Navigation" id="Navigation"></a>
+	<div class="col-md-2"><h3 class="bottomnav site">Account</h3><a href="/Collections.cfm/AxBolduc" class="bottomnav">Collection</a><br>
+<a href="/ForumSubscriptions.cfm" class="bottomnav">Forum Subscriptions</a><br>
+<a href="/Friends.cfm" class="bottomnav">Friends</a><br>
+<a href="/Goals.cfm" class="bottomnav">Goals</a><br>
+<a href="/YourLists.cfm" class="bottomnav">Lists</a><br>
+<a href="/Messages.cfm" class="bottomnav">Messages</a><br>
+<a href="/Permissions.cfm" class="bottomnav">Permissions</a><br>
+<a href="/Profile.cfm/AxBolduc" class="bottomnav">Profile</a><br>
+<a href="/YourPending.cfm" class="bottomnav">Queue</a><br>
+<a href="/YourRatings.cfm" class="bottomnav">Ratings</a><br>
+<a href="/SalesLinks.cfm/AxBolduc" class="bottomnav">Sales Links</a><br>
+<a href="/SavedPackRips.cfm" class="bottomnav">Saved Pack Rips</a><br>
+<a href="/YourSponsorships.cfm" class="bottomnav">Sponsorships</a><br>
+<a href="/YourTransactions.cfm" class="bottomnav">Transactions</a><div class="d-md-none"><hr /></div>
+</div>
+<div class="col-md-2"><h3 class="bottomnav site">Browse</h3>
+
+<a href="/ViewAll.cfm/sp/Baseball" class="bottomnav">Baseball</a><br>
+<a href="/ViewAll.cfm/sp/Basketball" class="bottomnav">Basketball</a><br>
+<a href="/ViewAll.cfm/sp/Boxing" class="bottomnav">Boxing</a><br>
+<a href="/ViewAll.cfm/sp/Cricket" class="bottomnav">Cricket</a><br>
+<a href="/ViewAll.cfm/sp/Football" class="bottomnav">Football</a><br>
+<a href="/ViewAll.cfm/sp/Gaming" class="bottomnav">Gaming</a><br>
+<a href="/ViewAll.cfm/sp/Golf" class="bottomnav">Golf</a><br>
+<a href="/ViewAll.cfm/sp/Hockey" class="bottomnav">Hockey</a><br>
+<a href="/ViewAll.cfm/sp/Misc Sports" class="bottomnav">Misc Sports</a><br>
+<a href="/ViewAll.cfm/sp/MMA" class="bottomnav">MMA</a><br>
+<a href="/ViewAll.cfm/sp/Multi-Sport" class="bottomnav">Multi-Sport</a><br>
+<a href="/ViewAll.cfm/sp/Non-Sport" class="bottomnav">Non-Sport</a><br>
+<a href="/ViewAll.cfm/sp/Racing" class="bottomnav">Racing</a><br>
+<a href="/ViewAll.cfm/sp/Soccer" class="bottomnav">Soccer</a><br>
+<a href="/ViewAll.cfm/sp/Tennis" class="bottomnav">Tennis</a><br>
+<a href="/ViewAll.cfm/sp/Wrestling" class="bottomnav">Wrestling</a><br>
+<div class="d-md-none"><hr /></div></div>
+<div class="col-md-2"><h3 class="bottomnav site">Features</h3><a href="/CardoftheDay.cfm" class="bottomnav">Card of the Day</a><br>
+<a href="/CompletedSets.cfm" class="bottomnav">Galleries</a><br>
+<a href="/Games.cfm" class="bottomnav">Games</a><br>
+<a href="/Polls.cfm" class="bottomnav">Poll of the Day</a><br>
+<a href="/RecentlyAdded.cfm" class="bottomnav">Recently Added</a><br>
+<a href="/RecentlyCollected.cfm" class="bottomnav">Recently Collected</a><br>
+<a href="/ImageSearch.cfm" class="bottomnav">Reverse Image Search</a><br>
+<a href="/PackRips.cfm" class="bottomnav">Rip a Pack</a><br>
+<a href="/SiteAwards.cfm" class="bottomnav">Site Awards</a><br>
+<a href="/Tags.cfm" class="bottomnav">Tagged</a><br>
+<a href="/ToDo.cfm" class="bottomnav">Things To Do</a><br>
+<a href="/TopMembers.cfm" class="bottomnav">Top Members</a><br>
+<a href="/TopSearches.cfm" class="bottomnav">Top Searches</a><br>
+<a href="/TopSets.cfm" class="bottomnav">Top Sets</a><br>
+<a href="/UserLists.cfm" class="bottomnav">User Lists</a><div class="d-md-none"><hr /></div></div>
+<div class="col-md-2"><h3 class="bottomnav site">Resources</h3>
+<a href="/HobbyArticles.cfm" class="bottomnav">Blogs</a><br>
+<a href="/CardCompanies.cfm" class="bottomnav">Card Companies</a><br>
+<a href="/CardShops.cfm" class="bottomnav">Card Shops</a><br>
+<a href="/CardShows.cfm" class="bottomnav">Card Shows</a><br>
+<a href="/Transactions.cfm" class="bottomnav">Completed Transactions</a><br>
+<a href="/Forums.cfm" class="bottomnav">Forums</a><br>
+<a href="/Glossary.cfm" class="bottomnav">Glossary</a><br>
+<a href="/Pricing.cfm" class="bottomnav">Pricing</a><br>
+<a href="/ReleaseDates.cfm" class="bottomnav">Release Dates</a><div class="d-md-none"><hr /></div></div>
+    <div class="col-md-2"><h3 class="bottomnav site">General Info</h3><a href="/AboutUs.cfm" class="bottomnav">About Us</a><br>
+<a href="/ChangeLog.cfm" class="bottomnav">Change Log</a><br>
+<a href="/ContactUs.cfm" class="bottomnav">Contact Us</a><br>
+<a href="/FAQ.cfm" class="bottomnav">FAQ</a><br>
+<a href="/Members.cfm" class="bottomnav">Member Directory</a><br>
+<a href="/PrivacyPolicy.cfm" class="bottomnav">Privacy Policy</a><br>
+<a href="/Sponsor.cfm" class="bottomnav">Sponsorships</a><br>
+<a href="/Stats.cfm" class="bottomnav">Stats</a><br>
+<a href="https://www.bonfire.com/store/trading-card-database-store/" target="_blank" class="bottomnav">Store</a><br>
+<a href="/Support.cfm" class="bottomnav">Support the Site</a><br>
+<a href="/TermsOfUse.cfm" class="bottomnav">Terms of Use</a><br>
+<a href="/Premium.cfm" class="bottomnav">Upgrade to Ad-Free</a><br>
+<a href="/UserManual.cfm" class="bottomnav">User Manual</a><div class="d-md-none"><hr /></div></div>
+<div class="col-md-2">
+<a href="https://www.youtube.com/channel/UCl5lNQpG-wUZfdefEB_HRjw/" target="_blank"><img src="/Images/LogoYT40.gif" border="0" title="YouTube" alt="YouTube logo" width="40" height="40" loading="lazy" /></a>&nbsp;&nbsp;
+<a href="http://www.facebook.com/pages/The-Trading-Card-Database/124883397553511" target="_blank"><img src="/Images/LogoFB40.gif" border="0" title="Facebook" alt="Facebook logo" width="40" height="40" loading="lazy" /></a>&nbsp;&nbsp;
+<a href="http://twitter.com/TradingCardDB" target="_blank"><img src="/Images/LogoX40.gif" border="0" title="X (Twitter)" alt="X logo" width="40" height="40" loading="lazy" /></a></div>
+</div>
+<div id="bottomnav" class="row"><div class="col-md-12">
+<p align="center"><font color="#FFFFFF">Copyright &copy; 2026  Trading Card Database LLC<br>
+Designated trademarks and brands are the property of their respective owners.</font></p></div>
+</div>
+
+</div>
+</div></body>
+
+</html>

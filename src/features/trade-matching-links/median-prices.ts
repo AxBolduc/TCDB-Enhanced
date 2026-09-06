@@ -1,5 +1,6 @@
 import { COLORS } from '../../core/colors';
 import { sleep } from '../../core/queue';
+import { isMedianPriceEnabled } from '../../core/settings';
 import { absoluteUrl } from '../../core/urls';
 import { getCachedPrice, setCachedPrice } from './cache';
 import { parseMedianPrice } from './parser';
@@ -17,6 +18,7 @@ export function addMedianPricesToCardLinks(): void {
     cardLink.dataset.tcdbMedianQueued = 'true';
 
     const priceSpan = document.createElement('span');
+    priceSpan.dataset.tcdbMedianPrice = 'true';
     priceSpan.textContent = ' Med: …';
     priceSpan.title = 'Checking median price...';
     priceSpan.style.marginLeft = '0.35em';
@@ -32,8 +34,19 @@ export function addMedianPricesToCardLinks(): void {
       continue;
     }
 
-    chain = chain.then(() => fetchMedianPrice(url, priceSpan)).then(() => sleep(REQUEST_DELAY_MS));
+    chain = chain.then(async () => {
+      if (!isMedianPriceEnabled() || !priceSpan.isConnected) return;
+      await fetchMedianPrice(url, priceSpan);
+      await sleep(REQUEST_DELAY_MS);
+    });
   }
+}
+
+export function removeMedianPrices(): void {
+  document.querySelectorAll<HTMLElement>('[data-tcdb-median-price]').forEach(element => element.remove());
+  document.querySelectorAll<HTMLAnchorElement>('a[data-tcdb-median-queued]').forEach(link => {
+    delete link.dataset.tcdbMedianQueued;
+  });
 }
 
 async function fetchMedianPrice(url: string, priceSpan: HTMLSpanElement): Promise<void> {
