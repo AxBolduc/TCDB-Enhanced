@@ -2,6 +2,10 @@
 
 A modular userscript project for TCDB enhancements.
 
+## Install
+
+[Click here to install the latest release](https://github.com/AxBolduc/TCDB-Enhanced/releases/latest/download/tcdb-enhanced.user.js)
+
 ## Development
 
 Install dependencies with pnpm:
