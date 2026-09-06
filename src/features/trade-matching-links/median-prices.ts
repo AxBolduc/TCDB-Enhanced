@@ -1,3 +1,4 @@
+import { COLORS } from '../../core/colors';
 import { sleep } from '../../core/queue';
 import { absoluteUrl } from '../../core/urls';
 import { getCachedPrice, setCachedPrice } from './cache';
@@ -21,7 +22,7 @@ export function addMedianPricesToCardLinks(): void {
     priceSpan.style.marginLeft = '0.35em';
     priceSpan.style.fontSize = '0.85em';
     priceSpan.style.whiteSpace = 'nowrap';
-    priceSpan.style.color = '#fd7e14';
+    priceSpan.style.color = COLORS.warning;
     cardLink.insertAdjacentElement('afterend', priceSpan);
 
     const url = absoluteUrl(cardLink.getAttribute('href') ?? '');
@@ -45,6 +46,6 @@ async function fetchMedianPrice(url: string, priceSpan: HTMLSpanElement): Promis
   } catch {
     priceSpan.textContent = ' Med: !';
     priceSpan.title = 'Could not check median price';
-    priceSpan.style.color = '#dc3545';
+    priceSpan.style.color = COLORS.danger;
   }
 }
