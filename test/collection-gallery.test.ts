@@ -32,6 +32,14 @@ describe('collection gallery', () => {
       .toBe('$0.20');
   });
 
+  it('uses the saved number of columns', () => {
+    localStorage.setItem('tcdb-enhanced:gallery-columns', '7');
+    enhanceCollectionGallery();
+
+    const gallery = document.querySelector<HTMLElement>('[data-tcdb-enhanced-gallery]');
+    expect(gallery?.style.getPropertyValue('--tcdb-gallery-columns')).toBe('7');
+  });
+
   it('switches between the front and back image', () => {
     enhanceCollectionGallery();
 

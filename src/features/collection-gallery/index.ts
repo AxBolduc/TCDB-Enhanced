@@ -1,7 +1,9 @@
 import {
+  getGalleryColumns,
   isCollectionGalleryEnabled,
   isInfiniteGalleryEnabled,
   onCollectionGallerySettingChange,
+  onGalleryColumnsSettingChange,
   onInfiniteGallerySettingChange,
 } from '../../core/settings';
 
@@ -15,12 +17,15 @@ export function initCollectionGallery(): void {
     if (enabled) enhanceCollectionGallery();
     else restoreOriginalCollectionGallery();
   });
+
+  onGalleryColumnsSettingChange(applyGalleryColumns);
 }
 
 export function enhanceCollectionGallery(): void {
   const existingGallery = document.querySelector<HTMLElement>(`[${GALLERY_ATTRIBUTE}]`);
   if (existingGallery) {
     existingGallery.hidden = false;
+    applyGalleryColumns(getGalleryColumns());
     const sentinel = document.querySelector<HTMLElement>('[data-tcdb-gallery-sentinel]');
     if (sentinel) sentinel.hidden = !isInfiniteGalleryEnabled();
     document.querySelectorAll<HTMLElement>(`[${ORIGINAL_ATTRIBUTE}]`).forEach(element => {
@@ -37,6 +42,7 @@ export function enhanceCollectionGallery(): void {
 
   const gallery = document.createElement('div');
   gallery.setAttribute(GALLERY_ATTRIBUTE, 'true');
+  gallery.style.setProperty('--tcdb-gallery-columns', String(getGalleryColumns()));
 
   for (const { image, table } of entries) {
     gallery.append(createCard(table, image));
@@ -212,6 +218,11 @@ function normalizeText(value: string | null | undefined): string {
   return value?.replace(/\s+/g, ' ').trim() ?? '';
 }
 
+function applyGalleryColumns(columns: number): void {
+  document.querySelector<HTMLElement>(`[${GALLERY_ATTRIBUTE}]`)
+    ?.style.setProperty('--tcdb-gallery-columns', String(columns));
+}
+
 function addGalleryStyles(): void {
   if (document.querySelector('[data-tcdb-gallery-styles]')) return;
 
@@ -220,8 +231,7 @@ function addGalleryStyles(): void {
   style.textContent = `
     [${GALLERY_ATTRIBUTE}] {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(145px, 180px));
-      justify-content: center;
+      grid-template-columns: repeat(var(--tcdb-gallery-columns, 5), minmax(0, 1fr));
       gap: 1rem;
       margin: 1rem 0 1.5rem;
     }
@@ -302,10 +312,7 @@ function addGalleryStyles(): void {
       text-align: center;
     }
     @media (max-width: 400px) {
-      [${GALLERY_ATTRIBUTE}] {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 0.65rem;
-      }
+      [${GALLERY_ATTRIBUTE}] { gap: 0.65rem; }
     }
   `;
   document.head.append(style);

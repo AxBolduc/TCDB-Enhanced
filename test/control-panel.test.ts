@@ -60,6 +60,21 @@ describe('control panel', () => {
     expect(localStorage.getItem('tcdb-enhanced:collection-gallery-enabled')).toBe('false');
   });
 
+  it('saves the gallery column count', () => {
+    initControlPanel();
+
+    const shadow = document.querySelector('#tcdb-enhanced-control-panel')?.shadowRoot;
+    const input = shadow?.querySelector<HTMLInputElement>('.gallery-columns-input');
+
+    expect(input?.value).toBe('5');
+    if (input) {
+      input.value = '7';
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    expect(localStorage.getItem('tcdb-enhanced:gallery-columns')).toBe('7');
+  });
+
   it('saves the infinite gallery setting', () => {
     initControlPanel();
 

@@ -4,6 +4,8 @@ const MEDIAN_PRICE_KEY = 'tcdb-enhanced:median-price-enabled';
 const MEDIAN_PRICE_CHANGE_EVENT = 'tcdb-enhanced:median-price-change';
 const COLLECTION_GALLERY_KEY = 'tcdb-enhanced:collection-gallery-enabled';
 const COLLECTION_GALLERY_CHANGE_EVENT = 'tcdb-enhanced:collection-gallery-change';
+const GALLERY_COLUMNS_KEY = 'tcdb-enhanced:gallery-columns';
+const GALLERY_COLUMNS_CHANGE_EVENT = 'tcdb-enhanced:gallery-columns-change';
 const INFINITE_GALLERY_KEY = 'tcdb-enhanced:infinite-gallery-enabled';
 const INFINITE_GALLERY_CHANGE_EVENT = 'tcdb-enhanced:infinite-gallery-change';
 
@@ -76,6 +78,32 @@ export function setCollectionGalleryEnabled(enabled: boolean): void {
 export function onCollectionGallerySettingChange(listener: (enabled: boolean) => void): void {
   window.addEventListener(COLLECTION_GALLERY_CHANGE_EVENT, (event) => {
     listener((event as CustomEvent<boolean>).detail);
+  });
+}
+
+export function getGalleryColumns(): number {
+  try {
+    const columns = Number(localStorage.getItem(GALLERY_COLUMNS_KEY));
+    return Number.isInteger(columns) && columns > 0 ? columns : 5;
+  } catch {
+    return 5;
+  }
+}
+
+export function setGalleryColumns(columns: number): void {
+  const validColumns = Number.isInteger(columns) && columns > 0 ? columns : 5;
+  try {
+    localStorage.setItem(GALLERY_COLUMNS_KEY, String(validColumns));
+  } catch {
+    // The setting still applies for this page when storage is unavailable.
+  }
+
+  window.dispatchEvent(new CustomEvent<number>(GALLERY_COLUMNS_CHANGE_EVENT, { detail: validColumns }));
+}
+
+export function onGalleryColumnsSettingChange(listener: (columns: number) => void): void {
+  window.addEventListener(GALLERY_COLUMNS_CHANGE_EVENT, (event) => {
+    listener((event as CustomEvent<number>).detail);
   });
 }
 

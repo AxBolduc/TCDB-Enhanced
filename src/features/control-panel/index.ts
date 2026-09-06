@@ -1,9 +1,11 @@
 import {
+  getGalleryColumns,
   isCollectionGalleryEnabled,
   isInfiniteGalleryEnabled,
   isMedianPriceEnabled,
   isTradeMatchingLinksEnabled,
   setCollectionGalleryEnabled,
+  setGalleryColumns,
   setInfiniteGalleryEnabled,
   setMedianPriceEnabled,
   setTradeMatchingLinksEnabled,
@@ -133,6 +135,19 @@ const panelMarkup = `
     .setting-copy { min-width: 0; }
     .setting-name { font-size: 14px; font-weight: 700; margin: 0 0 4px; }
     .setting-description { color: var(--tcdb-panel-muted); font-size: 12px; line-height: 1.4; margin: 0; }
+    .number-setting { align-items: center; display: flex; gap: 8px; margin-top: 10px; }
+    .number-setting label { color: var(--tcdb-panel-muted); font-size: 12px; }
+    .number-setting input {
+      background: white;
+      border: 1px solid var(--tcdb-panel-border);
+      border-radius: 6px;
+      color: var(--tcdb-panel-text);
+      font: inherit;
+      padding: 5px 7px;
+      width: 64px;
+    }
+    .number-setting input:focus-visible { outline: 3px solid #93c5fd; outline-offset: 2px; }
+    .number-setting input:disabled { background: #f1f5f9; color: var(--tcdb-panel-muted); }
     .toggle { cursor: pointer; flex: 0 0 auto; position: relative; }
     .toggle input { height: 1px; opacity: 0; position: absolute; width: 1px; }
 
@@ -226,6 +241,10 @@ const panelMarkup = `
           <div class="setting-copy">
             <p class="setting-name" id="collection-gallery-label">Compact collection gallery</p>
             <p class="setting-description">Show card fronts in a compact grid with titles and prices.</p>
+            <div class="number-setting">
+              <label for="gallery-columns">Columns</label>
+              <input id="gallery-columns" class="gallery-columns-input" type="number" min="1" step="1" inputmode="numeric">
+            </div>
           </div>
           <label class="toggle" aria-labelledby="collection-gallery-label">
             <input class="collection-gallery-toggle" type="checkbox">
@@ -265,9 +284,10 @@ export function initControlPanel(): void {
   const tradeMatchingLinksToggle = shadow.querySelector<HTMLInputElement>('.trade-matching-links-toggle');
   const medianPriceToggle = shadow.querySelector<HTMLInputElement>('.median-price-toggle');
   const collectionGalleryToggle = shadow.querySelector<HTMLInputElement>('.collection-gallery-toggle');
+  const galleryColumnsInput = shadow.querySelector<HTMLInputElement>('.gallery-columns-input');
   const infiniteGalleryToggle = shadow.querySelector<HTMLInputElement>('.infinite-gallery-toggle');
 
-  if (!root || !launcher || !backdrop || !drawer || !closeButton || !tradeMatchingLinksToggle || !medianPriceToggle || !collectionGalleryToggle || !infiniteGalleryToggle) return;
+  if (!root || !launcher || !backdrop || !drawer || !closeButton || !tradeMatchingLinksToggle || !medianPriceToggle || !collectionGalleryToggle || !galleryColumnsInput || !infiniteGalleryToggle) return;
 
   tradeMatchingLinksToggle.checked = isTradeMatchingLinksEnabled();
   tradeMatchingLinksToggle.addEventListener('change', () => {
@@ -280,8 +300,16 @@ export function initControlPanel(): void {
   });
 
   collectionGalleryToggle.checked = isCollectionGalleryEnabled();
+  galleryColumnsInput.value = String(getGalleryColumns());
+  galleryColumnsInput.disabled = !collectionGalleryToggle.checked;
   collectionGalleryToggle.addEventListener('change', () => {
     setCollectionGalleryEnabled(collectionGalleryToggle.checked);
+    galleryColumnsInput.disabled = !collectionGalleryToggle.checked;
+  });
+  galleryColumnsInput.addEventListener('change', () => {
+    const columns = Number(galleryColumnsInput.value);
+    setGalleryColumns(columns);
+    galleryColumnsInput.value = String(getGalleryColumns());
   });
 
   infiniteGalleryToggle.checked = isInfiniteGalleryEnabled();
