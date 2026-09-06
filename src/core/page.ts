@@ -1,3 +1,7 @@
+export function isChecklistPage(pathname = location.pathname): boolean {
+  return pathname.includes('/Checklist.cfm');
+}
+
 export function isCollectionGalleryPage(pathname = location.pathname): boolean {
   return pathname.includes('/CollectionModeGallery.cfm');
 }

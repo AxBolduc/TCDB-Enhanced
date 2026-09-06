@@ -3,10 +3,12 @@
   import ToggleSetting from '../../ui/ToggleSetting.svelte';
   import {
     getGalleryColumns,
+    isChecklistGalleryEnabled,
     isCollectionGalleryEnabled,
     isInfiniteGalleryEnabled,
     isMedianPriceEnabled,
     isTradeMatchingLinksEnabled,
+    setChecklistGalleryEnabled,
     setCollectionGalleryEnabled,
     setGalleryColumns,
     setInfiniteGalleryEnabled,
@@ -17,6 +19,7 @@
   let opened = $state(false);
   let tradeMatchingLinksEnabled = $state(isTradeMatchingLinksEnabled());
   let medianPriceEnabled = $state(isMedianPriceEnabled());
+  let checklistGalleryEnabled = $state(isChecklistGalleryEnabled());
   let collectionGalleryEnabled = $state(isCollectionGalleryEnabled());
   let galleryColumns = $state(getGalleryColumns());
   let infiniteGalleryEnabled = $state(isInfiniteGalleryEnabled());
@@ -42,6 +45,11 @@
   function updateMedianPrice(enabled: boolean): void {
     medianPriceEnabled = enabled;
     setMedianPriceEnabled(enabled);
+  }
+
+  function updateChecklistGallery(enabled: boolean): void {
+    checklistGalleryEnabled = enabled;
+    setChecklistGalleryEnabled(enabled);
   }
 
   function updateCollectionGallery(enabled: boolean): void {
@@ -114,6 +122,14 @@
           checked={medianPriceEnabled}
           inputClass="median-price-toggle"
           onchange={updateMedianPrice}
+        />
+        <ToggleSetting
+          id="checklist-gallery-label"
+          name="Checklist gallery view"
+          description="Show checklist cards in an image-led grid with linked card details."
+          checked={checklistGalleryEnabled}
+          inputClass="checklist-gallery-toggle"
+          onchange={updateChecklistGallery}
         />
         <ToggleSetting
           id="collection-gallery-label"

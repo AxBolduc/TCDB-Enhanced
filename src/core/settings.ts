@@ -8,6 +8,8 @@ const GALLERY_COLUMNS_KEY = 'tcdb-enhanced:gallery-columns';
 const GALLERY_COLUMNS_CHANGE_EVENT = 'tcdb-enhanced:gallery-columns-change';
 const INFINITE_GALLERY_KEY = 'tcdb-enhanced:infinite-gallery-enabled';
 const INFINITE_GALLERY_CHANGE_EVENT = 'tcdb-enhanced:infinite-gallery-change';
+const CHECKLIST_GALLERY_KEY = 'tcdb-enhanced:checklist-gallery-enabled';
+const CHECKLIST_GALLERY_CHANGE_EVENT = 'tcdb-enhanced:checklist-gallery-change';
 
 export function isTradeMatchingLinksEnabled(): boolean {
   try {
@@ -104,6 +106,30 @@ export function setGalleryColumns(columns: number): void {
 export function onGalleryColumnsSettingChange(listener: (columns: number) => void): void {
   window.addEventListener(GALLERY_COLUMNS_CHANGE_EVENT, (event) => {
     listener((event as CustomEvent<number>).detail);
+  });
+}
+
+export function isChecklistGalleryEnabled(): boolean {
+  try {
+    return localStorage.getItem(CHECKLIST_GALLERY_KEY) !== 'false';
+  } catch {
+    return true;
+  }
+}
+
+export function setChecklistGalleryEnabled(enabled: boolean): void {
+  try {
+    localStorage.setItem(CHECKLIST_GALLERY_KEY, String(enabled));
+  } catch {
+    // The setting still applies for this page when storage is unavailable.
+  }
+
+  window.dispatchEvent(new CustomEvent<boolean>(CHECKLIST_GALLERY_CHANGE_EVENT, { detail: enabled }));
+}
+
+export function onChecklistGallerySettingChange(listener: (enabled: boolean) => void): void {
+  window.addEventListener(CHECKLIST_GALLERY_CHANGE_EVENT, (event) => {
+    listener((event as CustomEvent<boolean>).detail);
   });
 }
 
