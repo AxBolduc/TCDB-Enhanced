@@ -10,6 +10,8 @@ const INFINITE_GALLERY_KEY = 'tcdb-enhanced:infinite-gallery-enabled';
 const INFINITE_GALLERY_CHANGE_EVENT = 'tcdb-enhanced:infinite-gallery-change';
 const CHECKLIST_GALLERY_KEY = 'tcdb-enhanced:checklist-gallery-enabled';
 const CHECKLIST_GALLERY_CHANGE_EVENT = 'tcdb-enhanced:checklist-gallery-change';
+const EBAY_SOLD_LISTINGS_KEY = 'tcdb-enhanced:ebay-sold-listings-enabled';
+const EBAY_SOLD_LISTINGS_CHANGE_EVENT = 'tcdb-enhanced:ebay-sold-listings-change';
 
 export function isTradeMatchingLinksEnabled(): boolean {
   try {
@@ -129,6 +131,30 @@ export function setChecklistGalleryEnabled(enabled: boolean): void {
 
 export function onChecklistGallerySettingChange(listener: (enabled: boolean) => void): void {
   window.addEventListener(CHECKLIST_GALLERY_CHANGE_EVENT, (event) => {
+    listener((event as CustomEvent<boolean>).detail);
+  });
+}
+
+export function isEbaySoldListingsEnabled(): boolean {
+  try {
+    return localStorage.getItem(EBAY_SOLD_LISTINGS_KEY) !== 'false';
+  } catch {
+    return true;
+  }
+}
+
+export function setEbaySoldListingsEnabled(enabled: boolean): void {
+  try {
+    localStorage.setItem(EBAY_SOLD_LISTINGS_KEY, String(enabled));
+  } catch {
+    // The setting still applies for this page when storage is unavailable.
+  }
+
+  window.dispatchEvent(new CustomEvent<boolean>(EBAY_SOLD_LISTINGS_CHANGE_EVENT, { detail: enabled }));
+}
+
+export function onEbaySoldListingsSettingChange(listener: (enabled: boolean) => void): void {
+  window.addEventListener(EBAY_SOLD_LISTINGS_CHANGE_EVENT, (event) => {
     listener((event as CustomEvent<boolean>).detail);
   });
 }

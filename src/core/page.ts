@@ -17,3 +17,7 @@ export function isTradeMatchingPage(pathname = location.pathname): boolean {
 export function isTransactionsPage(pathname = location.pathname): boolean {
   return pathname.includes('/YourTransactions.cfm');
 }
+
+export function isViewCardPage(pathname = location.pathname): boolean {
+  return pathname.includes('/ViewCard.cfm');
+}

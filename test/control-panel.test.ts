@@ -101,6 +101,18 @@ describe('control panel', () => {
     expect(localStorage.getItem('tcdb-enhanced:infinite-gallery-enabled')).toBe('false');
   });
 
+  it('saves the eBay sold listings setting', () => {
+    initControlPanel();
+
+    const shadow = document.querySelector('#tcdb-enhanced-control-panel')?.shadowRoot;
+    const toggle = shadow?.querySelector<HTMLInputElement>('.ebay-sold-listings-toggle');
+
+    expect(toggle?.checked).toBe(true);
+    toggle?.click();
+
+    expect(localStorage.getItem('tcdb-enhanced:ebay-sold-listings-enabled')).toBe('false');
+  });
+
   it('closes with Escape', async () => {
     initControlPanel();
 

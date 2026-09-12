@@ -5,11 +5,13 @@
     getGalleryColumns,
     isChecklistGalleryEnabled,
     isCollectionGalleryEnabled,
+    isEbaySoldListingsEnabled,
     isInfiniteGalleryEnabled,
     isMedianPriceEnabled,
     isTradeMatchingLinksEnabled,
     setChecklistGalleryEnabled,
     setCollectionGalleryEnabled,
+    setEbaySoldListingsEnabled,
     setGalleryColumns,
     setInfiniteGalleryEnabled,
     setMedianPriceEnabled,
@@ -23,6 +25,7 @@
   let collectionGalleryEnabled = $state(isCollectionGalleryEnabled());
   let galleryColumns = $state(getGalleryColumns());
   let infiniteGalleryEnabled = $state(isInfiniteGalleryEnabled());
+  let ebaySoldListingsEnabled = $state(isEbaySoldListingsEnabled());
   let launcher: HTMLButtonElement;
   let closeButton: HTMLButtonElement;
 
@@ -65,6 +68,11 @@
   function updateInfiniteGallery(enabled: boolean): void {
     infiniteGalleryEnabled = enabled;
     setInfiniteGalleryEnabled(enabled);
+  }
+
+  function updateEbaySoldListings(enabled: boolean): void {
+    ebaySoldListingsEnabled = enabled;
+    setEbaySoldListingsEnabled(enabled);
   }
 </script>
 
@@ -161,6 +169,14 @@
           checked={infiniteGalleryEnabled}
           inputClass="infinite-gallery-toggle"
           onchange={updateInfiniteGallery}
+        />
+        <ToggleSetting
+          id="ebay-sold-listings-label"
+          name="eBay sold listings"
+          description="Add a sold-listings eBay search button to card pages."
+          checked={ebaySoldListingsEnabled}
+          inputClass="ebay-sold-listings-toggle"
+          onchange={updateEbaySoldListings}
         />
       </div>
     </main>
