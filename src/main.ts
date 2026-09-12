@@ -1,4 +1,4 @@
-import { isChecklistPage, isCollectionGalleryPage } from './core/page';
+import { isChecklistPage, isCollectionBrowsePage, isCollectionGalleryPage } from './core/page';
 import { initChecklistGallery } from './features/checklist-gallery';
 import { initCollectionGallery } from './features/collection-gallery';
 import { initControlPanel } from './features/control-panel';
@@ -11,4 +11,4 @@ initTradeMatchingLinks();
 initMedianPrices();
 initEbaySoldListings();
 if (isChecklistPage()) initChecklistGallery();
-if (isCollectionGalleryPage()) initCollectionGallery();
+if (isCollectionGalleryPage() || isCollectionBrowsePage()) initCollectionGallery();

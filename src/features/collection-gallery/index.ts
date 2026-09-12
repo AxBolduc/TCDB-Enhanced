@@ -5,6 +5,7 @@ import {
   isInfiniteGalleryEnabled,
   onCollectionGallerySettingChange,
   onGalleryColumnsSettingChange,
+  setCollectionGalleryEnabled,
   onInfiniteGallerySettingChange,
 } from '../../core/settings';
 import CollectionGallery from './CollectionGallery.svelte';
@@ -14,9 +15,11 @@ const GALLERY_ATTRIBUTE = 'data-tcdb-enhanced-gallery';
 const ORIGINAL_ATTRIBUTE = 'data-tcdb-original-gallery-card';
 
 type GalleryEntry = { image: HTMLImageElement; table: HTMLTableElement };
+type BrowseEntry = { row: HTMLTableRowElement };
 type GalleryComponent = { appendCards: (cards: GalleryCardModel[]) => void };
 
 export function initCollectionGallery(): void {
+  if (getBrowseEntries(document).length) installBrowseToggle();
   if (isCollectionGalleryEnabled()) enhanceCollectionGallery();
 
   onCollectionGallerySettingChange((enabled) => {
@@ -41,27 +44,17 @@ export function enhanceCollectionGallery(): void {
   }
 
   const entries = getGalleryEntries(document);
-  if (!entries.length) return;
-
-  const gallery = document.createElement('div');
-  gallery.setAttribute(GALLERY_ATTRIBUTE, 'true');
-  gallery.style.setProperty('--tcdb-gallery-columns', String(getGalleryColumns()));
-
-  const component = mount(CollectionGallery, {
-    target: gallery,
-    props: { initialCards: entries.map(toGalleryCard) },
-  }) as GalleryComponent;
-
-  const firstWrapper = getTableWrapper(entries[0].table);
-  firstWrapper.before(gallery);
-
-  for (const { table } of entries) {
-    const wrapper = getTableWrapper(table);
-    wrapper.setAttribute(ORIGINAL_ATTRIBUTE, 'true');
-    wrapper.hidden = true;
+  if (entries.length) {
+    renderGallery(entries.map(toGalleryCard), getTableWrapper(entries[0].table), entries.map(({ table }) => getTableWrapper(table)));
+    return;
   }
 
-  setupInfiniteScroll(gallery, component, findNextPageUrl(document));
+  const browse = getBrowseEntries(document);
+  if (!browse.length) return;
+  const browseTable = browse[0].row.closest('table');
+  if (!browseTable) return;
+  renderGallery(browse.map(toBrowseGalleryCard), browseTable, [browseTable]);
+  installBrowseToggle();
 }
 
 export function restoreOriginalCollectionGallery(): void {
@@ -70,6 +63,26 @@ export function restoreOriginalCollectionGallery(): void {
   document.querySelectorAll<HTMLElement>(`[${ORIGINAL_ATTRIBUTE}]`).forEach(element => {
     element.hidden = false;
   });
+}
+
+function renderGallery(cards: GalleryCardModel[], before: Element, originals: HTMLElement[]): void {
+  const gallery = document.createElement('div');
+  gallery.setAttribute(GALLERY_ATTRIBUTE, 'true');
+  gallery.style.setProperty('--tcdb-gallery-columns', String(getGalleryColumns()));
+
+  const component = mount(CollectionGallery, {
+    target: gallery,
+    props: { initialCards: cards },
+  }) as GalleryComponent;
+
+  before.before(gallery);
+
+  for (const original of originals) {
+    original.setAttribute(ORIGINAL_ATTRIBUTE, 'true');
+    original.hidden = true;
+  }
+
+  setupInfiniteScroll(gallery, component, findNextPageUrl(document));
 }
 
 function getGalleryEntries(root: ParentNode): GalleryEntry[] {
@@ -93,6 +106,69 @@ function toGalleryCard({ image: sourceImage, table }: GalleryEntry): GalleryCard
     price: normalizeText(table.querySelector('h3.site + div strong')?.textContent)
       || 'Price unavailable',
   };
+}
+
+function getBrowseEntries(root: ParentNode): BrowseEntry[] {
+  return Array.from(root.querySelectorAll<HTMLTableRowElement>('tr.collection_row'))
+    .filter(row => Boolean(row.querySelector('a[href*="ViewCard.cfm"]')))
+    .map(row => ({ row }));
+}
+
+function toBrowseGalleryCard({ row }: BrowseEntry): GalleryCardModel {
+  const cardLink = Array.from(row.querySelectorAll<HTMLAnchorElement>('a[href*="ViewCard.cfm"]'))
+    .find(link => normalizeText(link.textContent));
+  const nameLink = Array.from(row.querySelectorAll<HTMLAnchorElement>('a[href*="ViewCard.cfm"]'))
+    .find(link => link !== cardLink && normalizeText(link.textContent));
+  const infoLink = row.querySelector<HTMLAnchorElement>('a[href*="CollectionCard.cfm"]');
+  const ebayLink = row.querySelector<HTMLAnchorElement>('a[href*="ebay.com"]');
+  const href = nameLink?.href ?? cardLink?.href ?? '#';
+  const number = normalizeText(cardLink?.textContent);
+  const nameCell = nameLink?.closest('td');
+  const name = normalizeText(nameCell?.textContent) || normalizeText(nameLink?.textContent);
+  const title = [number, name].filter(Boolean).join(' ');
+  const quantity = normalizeText(row.querySelector('.badge')?.textContent);
+
+  return {
+    href,
+    front: { src: cardImageUrl(href, 'Fr'), alt: `${title} Front` },
+    back: { src: cardImageUrl(href, 'Bk'), alt: `${title} Back` },
+    title: title || href,
+    price: quantity ? `Qty ${quantity}` : (infoLink ? 'Details available' : (ebayLink ? 'Search eBay' : '')),
+  };
+}
+
+function cardImageUrl(href: string, side: 'Fr' | 'Bk'): string {
+  const url = new URL(href, location.href);
+  const match = url.pathname.match(/\/sid\/(\d+)\/cid\/(\d+)\//i);
+  if (!match) return href;
+  const [, sid, cid] = match;
+  return new URL(`/Images/Cards/${detectCardCategory()}/${sid}/${sid}-${cid}${side}.jpg`, location.href).href;
+}
+
+function detectCardCategory(): string {
+  const title = document.title;
+  const categories = ['Baseball', 'Basketball', 'Football', 'Hockey', 'Racing', 'Soccer', 'Wrestling', 'Gaming', 'Multi-Sport', 'Non-Sport'];
+  return categories.find(category => title.includes(category)) ?? 'Baseball';
+}
+
+function installBrowseToggle(): void {
+  const options = document.querySelector<HTMLElement>('.btn-group');
+  if (!options || document.querySelector('[data-tcdb-browse-gallery-toggle]')) return;
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'btn btn-sm btn-outline-primary ms-2';
+  button.dataset.tcdbBrowseGalleryToggle = 'true';
+  const update = () => {
+    button.textContent = isCollectionGalleryEnabled() ? 'Original view' : 'Gallery view';
+    button.setAttribute('aria-pressed', String(isCollectionGalleryEnabled()));
+  };
+  button.addEventListener('click', () => {
+    setCollectionGalleryEnabled(!isCollectionGalleryEnabled());
+    update();
+  });
+  onCollectionGallerySettingChange(update);
+  update();
+  options.after(button);
 }
 
 function findNextPageUrl(root: ParentNode): string | null {

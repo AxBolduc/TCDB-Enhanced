@@ -6,6 +6,7 @@ import {
 } from '../src/features/collection-gallery';
 
 const fixture = readFileSync('test/fixtures/view_collection_gallery.html', 'utf-8');
+const browseFixture = readFileSync('test/fixtures/collection_browse.html', 'utf-8');
 
 describe('collection gallery', () => {
   beforeEach(() => {
@@ -106,5 +107,19 @@ describe('collection gallery', () => {
     enhanceCollectionGallery();
 
     expect(document.querySelectorAll('[data-tcdb-enhanced-gallery]')).toHaveLength(1);
+  });
+
+  it('adds a gallery for collection browse rows', () => {
+    document.documentElement.innerHTML = browseFixture;
+
+    enhanceCollectionGallery();
+
+    const gallery = document.querySelector('[data-tcdb-enhanced-gallery]');
+    const cards = gallery?.querySelectorAll('[data-tcdb-gallery-card]');
+
+    expect(cards).toHaveLength(14);
+    expect(cards?.[0].querySelector('[data-tcdb-card-title]')?.textContent).toContain('65 Trevor Story');
+    expect(cards?.[0].querySelector('img')?.getAttribute('src')).toContain('/Images/Cards/Baseball/654047/654047-38487136Fr.jpg');
+    expect(document.querySelector<HTMLElement>('[data-tcdb-original-gallery-card]')?.hidden).toBe(true);
   });
 });

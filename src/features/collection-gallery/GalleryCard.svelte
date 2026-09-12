@@ -3,7 +3,13 @@
 
   let { card }: { card: GalleryCardModel } = $props();
   let showingBack = $state(false);
+  let imageFailed = $state(false);
   let image = $derived(showingBack && card.back ? card.back : card.front);
+
+  $effect(() => {
+    image.src;
+    imageFailed = false;
+  });
 
   function flip(): void {
     if (!card.back) return;
@@ -13,7 +19,13 @@
 
 <article data-tcdb-gallery-card="true">
   <a href={card.href} class="image-link">
-    <img src={image.src} alt={image.alt} />
+    {#if imageFailed}
+      <div class="missing-image" role="img" aria-label={`No image available for ${card.title}`}>
+        No image
+      </div>
+    {:else}
+      <img src={image.src} alt={image.alt} onerror={() => imageFailed = true} />
+    {/if}
   </a>
   <div class="details">
     <a data-tcdb-card-title="true" href={card.href}>{card.title}</a>
@@ -58,6 +70,21 @@
     display: block;
     height: 100%;
     object-fit: contain;
+    width: 100%;
+  }
+
+  .missing-image {
+    align-items: center;
+    border: 1px dashed #b8b8b8;
+    border-radius: 0.4rem;
+    color: #777;
+    display: flex;
+    font-size: 0.85rem;
+    font-weight: 700;
+    height: 100%;
+    justify-content: center;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
     width: 100%;
   }
 

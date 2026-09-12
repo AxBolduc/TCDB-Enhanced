@@ -6,6 +6,10 @@ export function isCollectionGalleryPage(pathname = location.pathname): boolean {
   return pathname.includes('/CollectionModeGallery.cfm');
 }
 
+export function isCollectionBrowsePage(pathname = location.pathname): boolean {
+  return pathname.includes('/CollectionBrowse.cfm');
+}
+
 export function isCollectionCheckPage(pathname = location.pathname): boolean {
   return pathname.includes('/CollectionCheck.cfm');
 }
