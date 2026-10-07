@@ -2,9 +2,11 @@ import { SerialQueue } from '../../core/queue';
 import { tradeMatchingUrl } from '../../core/urls';
 import { getCachedCounts, setCachedCounts } from './cache';
 import { parseTradeMatchCounts } from './parser';
-import { ADDED_CLASS, renderChecking, renderCounts, renderError } from './render';
+import { ADDED_CLASS, CELL_CLASS, renderChecking, renderCounts, renderError, WANT_LINK_CLASS } from './render';
 
 const CHECKED_ATTR = 'data-tcdb-tm-check-queued';
+const COLSPAN_ATTR = 'data-tcdb-tm-original-colspan';
+const ADDED_COLUMNS = 2;
 const REQUEST_DELAY_MS = 1500;
 let watchingSectionExpansion = false;
 
@@ -34,7 +36,11 @@ export function enhanceCollectionCheckPage(): void {
 }
 
 export function removeTradeMatchingLinks(): void {
-  document.querySelectorAll(`.${ADDED_CLASS}`).forEach(link => link.remove());
+  document.querySelectorAll(`.${CELL_CLASS}`).forEach(cell => cell.remove());
+  document.querySelectorAll<HTMLTableCellElement>(`td[${COLSPAN_ATTR}]`).forEach(cell => {
+    cell.colSpan = Number(cell.getAttribute(COLSPAN_ATTR));
+    cell.removeAttribute(COLSPAN_ATTR);
+  });
 }
 
 function queueCheck(link: HTMLAnchorElement): void {
@@ -59,28 +65,58 @@ function addTradeMatchingLinks(): void {
 
   for (const button of buttons) {
     const row = button.closest('tr');
-    if (!row) continue;
+    if (!row || row.querySelector(`.${CELL_CLASS}`)) continue;
 
     const memberLink = row.querySelector<HTMLAnchorElement>('a[href^="/Profile.cfm/"], a[href^="https://www.tcdb.com/Profile.cfm/"]');
-    if (!memberLink || memberLink.classList.contains(ADDED_CLASS)) continue;
-
-    const memberName = memberLink.textContent?.trim();
+    const memberName = memberLink?.textContent?.trim();
     if (!memberName) continue;
 
-    const tradeLink = document.createElement('a');
-    tradeLink.href = tradeMatchingUrl(memberName);
-    tradeLink.textContent = 'TM';
-    tradeLink.title = `Trade matching for ${memberName}`;
-    tradeLink.className = ADDED_CLASS;
-    tradeLink.dataset.memberName = memberName;
-    tradeLink.style.marginLeft = '0.4em';
-    tradeLink.style.fontSize = '0.85em';
-    tradeLink.style.fontWeight = 'normal';
-    tradeLink.style.whiteSpace = 'nowrap';
+    const table = row.closest('table');
+    if (table) addHeaderCells(table);
 
-    memberLink.insertAdjacentText('afterend', ' ');
-    memberLink.insertAdjacentElement('afterend', tradeLink);
+    const haveLink = createCountLink(memberName, ADDED_CLASS);
+    haveLink.dataset.memberName = memberName;
+    row.appendChild(createCountCell(haveLink));
+    row.appendChild(createCountCell(createCountLink(memberName, WANT_LINK_CLASS)));
+
+    const detailCell = row.nextElementSibling?.querySelector<HTMLTableCellElement>(':scope > td[colspan]');
+    if (detailCell && !detailCell.hasAttribute(COLSPAN_ATTR)) {
+      detailCell.setAttribute(COLSPAN_ATTR, String(detailCell.colSpan));
+      detailCell.colSpan += ADDED_COLUMNS;
+    }
   }
+}
+
+function addHeaderCells(table: HTMLTableElement): void {
+  const headerRow = table.rows[0];
+  if (!headerRow || headerRow.querySelector(`.${CELL_CLASS}`)) return;
+
+  for (const label of ['My Wants They Have', 'Their Wants I Have']) {
+    const cell = document.createElement('td');
+    cell.className = CELL_CLASS;
+    const strong = document.createElement('strong');
+    strong.textContent = label;
+    cell.appendChild(strong);
+    headerRow.appendChild(cell);
+  }
+}
+
+function createCountLink(memberName: string, className: string): HTMLAnchorElement {
+  const link = document.createElement('a');
+  link.href = tradeMatchingUrl(memberName);
+  link.textContent = '–';
+  link.title = `Trade matching for ${memberName}`;
+  link.className = className;
+  return link;
+}
+
+function createCountCell(link: HTMLAnchorElement): HTMLTableCellElement {
+  const cell = document.createElement('td');
+  cell.className = CELL_CLASS;
+  cell.style.textAlign = 'center';
+  cell.style.whiteSpace = 'nowrap';
+  cell.appendChild(link);
+  return cell;
 }
 
 function queueChecksForExpandedSections(): void {
