@@ -10,6 +10,8 @@ const INFINITE_GALLERY_KEY = 'tcdb-enhanced:infinite-gallery-enabled';
 const INFINITE_GALLERY_CHANGE_EVENT = 'tcdb-enhanced:infinite-gallery-change';
 const CHECKLIST_GALLERY_KEY = 'tcdb-enhanced:checklist-gallery-enabled';
 const CHECKLIST_GALLERY_CHANGE_EVENT = 'tcdb-enhanced:checklist-gallery-change';
+const CHECKLIST_IMAGE_URLS_KEY = 'tcdb-enhanced:checklist-image-urls-enabled';
+const CHECKLIST_IMAGE_URLS_CHANGE_EVENT = 'tcdb-enhanced:checklist-image-urls-change';
 const EBAY_SOLD_LISTINGS_KEY = 'tcdb-enhanced:ebay-sold-listings-enabled';
 const EBAY_SOLD_LISTINGS_CHANGE_EVENT = 'tcdb-enhanced:ebay-sold-listings-change';
 
@@ -131,6 +133,30 @@ export function setChecklistGalleryEnabled(enabled: boolean): void {
 
 export function onChecklistGallerySettingChange(listener: (enabled: boolean) => void): void {
   window.addEventListener(CHECKLIST_GALLERY_CHANGE_EVENT, (event) => {
+    listener((event as CustomEvent<boolean>).detail);
+  });
+}
+
+export function isChecklistImageUrlsEnabled(): boolean {
+  try {
+    return localStorage.getItem(CHECKLIST_IMAGE_URLS_KEY) !== 'false';
+  } catch {
+    return true;
+  }
+}
+
+export function setChecklistImageUrlsEnabled(enabled: boolean): void {
+  try {
+    localStorage.setItem(CHECKLIST_IMAGE_URLS_KEY, String(enabled));
+  } catch {
+    // The setting still applies for this page when storage is unavailable.
+  }
+
+  window.dispatchEvent(new CustomEvent<boolean>(CHECKLIST_IMAGE_URLS_CHANGE_EVENT, { detail: enabled }));
+}
+
+export function onChecklistImageUrlsSettingChange(listener: (enabled: boolean) => void): void {
+  window.addEventListener(CHECKLIST_IMAGE_URLS_CHANGE_EVENT, (event) => {
     listener((event as CustomEvent<boolean>).detail);
   });
 }
