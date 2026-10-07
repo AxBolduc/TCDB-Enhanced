@@ -50,6 +50,18 @@ describe('control panel', () => {
     expect(localStorage.getItem('tcdb-enhanced:median-price-enabled')).toBe('false');
   });
 
+  it('saves the checklist image URLs setting', () => {
+    initControlPanel();
+
+    const shadow = document.querySelector('#tcdb-enhanced-control-panel')?.shadowRoot;
+    const toggle = shadow?.querySelector<HTMLInputElement>('.checklist-image-urls-toggle');
+
+    expect(toggle?.checked).toBe(true);
+    toggle?.click();
+
+    expect(localStorage.getItem('tcdb-enhanced:checklist-image-urls-enabled')).toBe('false');
+  });
+
   it('saves the checklist gallery setting', () => {
     initControlPanel();
 

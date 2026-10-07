@@ -4,12 +4,14 @@
   import {
     getGalleryColumns,
     isChecklistGalleryEnabled,
+    isChecklistImageUrlsEnabled,
     isCollectionGalleryEnabled,
     isEbaySoldListingsEnabled,
     isInfiniteGalleryEnabled,
     isMedianPriceEnabled,
     isTradeMatchingLinksEnabled,
     setChecklistGalleryEnabled,
+    setChecklistImageUrlsEnabled,
     setCollectionGalleryEnabled,
     setEbaySoldListingsEnabled,
     setGalleryColumns,
@@ -22,6 +24,7 @@
   let tradeMatchingLinksEnabled = $state(isTradeMatchingLinksEnabled());
   let medianPriceEnabled = $state(isMedianPriceEnabled());
   let checklistGalleryEnabled = $state(isChecklistGalleryEnabled());
+  let checklistImageUrlsEnabled = $state(isChecklistImageUrlsEnabled());
   let collectionGalleryEnabled = $state(isCollectionGalleryEnabled());
   let galleryColumns = $state(getGalleryColumns());
   let infiniteGalleryEnabled = $state(isInfiniteGalleryEnabled());
@@ -53,6 +56,11 @@
   function updateChecklistGallery(enabled: boolean): void {
     checklistGalleryEnabled = enabled;
     setChecklistGalleryEnabled(enabled);
+  }
+
+  function updateChecklistImageUrls(enabled: boolean): void {
+    checklistImageUrlsEnabled = enabled;
+    setChecklistImageUrlsEnabled(enabled);
   }
 
   function updateCollectionGallery(enabled: boolean): void {
@@ -138,6 +146,14 @@
           checked={checklistGalleryEnabled}
           inputClass="checklist-gallery-toggle"
           onchange={updateChecklistGallery}
+        />
+        <ToggleSetting
+          id="checklist-image-urls-label"
+          name="Copy checklist image URLs"
+          description="Add a button to checklist pages that copies every card's full-size image URL."
+          checked={checklistImageUrlsEnabled}
+          inputClass="checklist-image-urls-toggle"
+          onchange={updateChecklistImageUrls}
         />
         <ToggleSetting
           id="collection-gallery-label"
