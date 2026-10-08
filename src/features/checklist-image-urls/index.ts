@@ -2,7 +2,12 @@ import {
   isChecklistImageUrlsEnabled,
   onChecklistImageUrlsSettingChange,
 } from '../../core/settings';
-import { findChecklistTable, findNextPageUrl, parseChecklist } from '../checklist-gallery/parser';
+import {
+  fetchChecklistPage,
+  findChecklistTable,
+  findNextPageUrl,
+  parseChecklist,
+} from '../checklist-gallery/parser';
 
 const BUTTON_SELECTOR = '[data-tcdb-copy-image-urls]';
 const DEFAULT_LABEL = 'Copy image URLs';
@@ -84,7 +89,7 @@ export async function collectChecklistImageUrls(
     onProgress(urls.size);
 
     const nextUrl = findNextPageUrl(page);
-    page = nextUrl ? await fetchPage(nextUrl) : null;
+    page = nextUrl ? await fetchChecklistPage(nextUrl) : null;
   }
 
   return [...urls];
@@ -96,13 +101,7 @@ async function loadFirstPage(): Promise<ParentNode> {
   if (!pageIndex || pageIndex === '1') return document;
 
   url.searchParams.set('PageIndex', '1');
-  return fetchPage(url.href);
-}
-
-async function fetchPage(url: string): Promise<Document> {
-  const response = await fetch(url, { credentials: 'same-origin' });
-  if (!response.ok) throw new Error(`Checklist request failed with ${response.status}`);
-  return new DOMParser().parseFromString(await response.text(), 'text/html');
+  return fetchChecklistPage(url.href);
 }
 
 function flash(button: HTMLButtonElement, message: string): void {

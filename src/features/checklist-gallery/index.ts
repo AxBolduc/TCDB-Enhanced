@@ -6,12 +6,20 @@ import {
   onInfiniteGallerySettingChange,
 } from '../../core/settings';
 import ChecklistGallery, { type ChecklistCard } from './ChecklistGallery.svelte';
-import { findChecklistTable, findNextPageUrl, parseChecklist } from './parser';
+import {
+  fetchChecklistPage,
+  findChecklistTable,
+  findNextPageUrl,
+  parseChecklist,
+} from './parser';
 
 const GALLERY_ATTRIBUTE = 'data-tcdb-checklist-gallery';
 const ORIGINAL_ATTRIBUTE = 'data-tcdb-original-checklist';
 
-type ChecklistGalleryComponent = { appendCards: (cards: ChecklistCard[]) => void };
+type ChecklistGalleryComponent = {
+  appendCards: (cards: ChecklistCard[]) => void;
+  prependCards: (cards: ChecklistCard[]) => void;
+};
 
 export function initChecklistGallery(): void {
   if (isChecklistGalleryEnabled()) enhanceChecklistGallery();
@@ -41,11 +49,16 @@ export function enhanceChecklistGallery(): void {
   table.before(gallery);
   table.setAttribute(ORIGINAL_ATTRIBUTE, 'true');
   table.hidden = true;
-  const component = mount(ChecklistGallery, {
+  let component: ChecklistGalleryComponent;
+  const loader = createPageLoader(findNextPageUrl(document), {
+    append: loaded => component.appendCards(loaded),
+    prepend: loaded => component.prependCards(loaded),
+  });
+  component = mount(ChecklistGallery, {
     target: gallery,
-    props: { initialCards: cards },
+    props: { initialCards: cards, loadAllCards: loader.loadAll },
   }) as ChecklistGalleryComponent;
-  setupInfiniteScroll(gallery, component, findNextPageUrl(document));
+  setupInfiniteScroll(gallery, loader);
 }
 
 export function restoreOriginalChecklist(): void {
@@ -55,12 +68,82 @@ export function restoreOriginalChecklist(): void {
   if (table) table.hidden = false;
 }
 
-function setupInfiniteScroll(
-  gallery: HTMLElement,
-  component: ChecklistGalleryComponent,
+type PageLoader = {
+  hasNextPage: () => boolean;
+  hasFailed: () => boolean;
+  loadNextPage: () => Promise<void>;
+  loadAll: () => Promise<boolean>;
+  onChange: (listener: (loading: boolean) => void) => void;
+};
+
+function createPageLoader(
   initialNextUrl: string | null,
-): void {
-  if (!initialNextUrl) return;
+  sink: { append: (cards: ChecklistCard[]) => void; prepend: (cards: ChecklistCard[]) => void },
+): PageLoader {
+  let nextUrl = initialNextUrl;
+  let failed = false;
+  let pending: Promise<void> | null = null;
+  let earlierPagesLoaded = false;
+  const listeners: ((loading: boolean) => void)[] = [];
+  const notify = (loading: boolean) => listeners.forEach(listener => listener(loading));
+
+  const loadNextPage = (): Promise<void> => {
+    if (pending) return pending;
+    if (!nextUrl) return Promise.resolve();
+    const url = nextUrl;
+    notify(true);
+    pending = (async () => {
+      try {
+        const page = await fetchChecklistPage(url);
+        const table = findChecklistTable(page);
+        if (table) sink.append(parseChecklist(table));
+        nextUrl = findNextPageUrl(page);
+      } catch {
+        failed = true;
+        nextUrl = null;
+      } finally {
+        pending = null;
+        notify(false);
+      }
+    })();
+    return pending;
+  };
+
+  // Infinite scrolling only moves forward, so a checklist opened on a later page
+  // still needs its earlier pages before every card in the set is shown.
+  const loadEarlierPages = async (): Promise<void> => {
+    if (earlierPagesLoaded) return;
+    const url = new URL(location.href);
+    const startIndex = Number(url.searchParams.get('PageIndex') ?? '1');
+    const earlier: ChecklistCard[] = [];
+    for (let index = 1; index < startIndex; index += 1) {
+      url.searchParams.set('PageIndex', String(index));
+      const table = findChecklistTable(await fetchChecklistPage(url.href));
+      if (table) earlier.push(...parseChecklist(table));
+    }
+    if (earlier.length) sink.prepend(earlier);
+    earlierPagesLoaded = true;
+  };
+
+  return {
+    hasNextPage: () => nextUrl !== null,
+    hasFailed: () => failed,
+    loadNextPage,
+    loadAll: async () => {
+      try {
+        await loadEarlierPages();
+      } catch {
+        return false;
+      }
+      while (nextUrl || pending) await loadNextPage();
+      return !failed;
+    },
+    onChange: listener => listeners.push(listener),
+  };
+}
+
+function setupInfiniteScroll(gallery: HTMLElement, loader: PageLoader): void {
+  if (!loader.hasNextPage()) return;
 
   const sentinel = document.createElement('div');
   sentinel.dataset.tcdbChecklistSentinel = 'true';
@@ -68,31 +151,17 @@ function setupInfiniteScroll(
   sentinel.hidden = !isInfiniteGalleryEnabled();
   gallery.after(sentinel);
 
-  let nextUrl: string | null = initialNextUrl;
-  let loading = false;
+  loader.onChange((loading) => {
+    if (loading) sentinel.textContent = 'Loading more cards…';
+    else if (loader.hasFailed()) sentinel.textContent = 'Could not load more cards.';
+    else sentinel.textContent = loader.hasNextPage() ? '' : 'All cards loaded.';
+  });
 
   const loadNextPage = async (): Promise<void> => {
-    if (!nextUrl || loading || gallery.hidden || !isInfiniteGalleryEnabled()) return;
-    loading = true;
-    sentinel.textContent = 'Loading more cards…';
+    if (!loader.hasNextPage() || gallery.hidden || !isInfiniteGalleryEnabled()) return;
+    await loader.loadNextPage();
 
-    try {
-      const response = await fetch(nextUrl, { credentials: 'same-origin' });
-      if (!response.ok) throw new Error(`Checklist request failed with ${response.status}`);
-
-      const page = new DOMParser().parseFromString(await response.text(), 'text/html');
-      const table = findChecklistTable(page);
-      if (table) component.appendCards(parseChecklist(table));
-      nextUrl = findNextPageUrl(page);
-      sentinel.textContent = nextUrl ? '' : 'All cards loaded.';
-    } catch {
-      sentinel.textContent = 'Could not load more cards.';
-      nextUrl = null;
-    } finally {
-      loading = false;
-    }
-
-    if (nextUrl && document.documentElement.scrollHeight <= window.innerHeight + 200) {
+    if (loader.hasNextPage() && document.documentElement.scrollHeight <= window.innerHeight + 200) {
       await loadNextPage();
     }
   };
