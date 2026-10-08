@@ -13,16 +13,57 @@
 
   import { untrack } from 'svelte';
 
-  let { initialCards }: { initialCards: ChecklistCard[] } = $props();
+  let { initialCards, loadAllCards }: {
+    initialCards: ChecklistCard[];
+    loadAllCards: () => Promise<boolean>;
+  } = $props();
   let cards = $state(untrack(() => [...initialCards]));
+  let team = $state('');
+  let loadState = $state<'partial' | 'loading' | 'complete' | 'failed'>('partial');
+
+  const teams = $derived([...new Set(cards.map(card => card.team))].sort((a, b) => a.localeCompare(b)));
+  const visibleCards = $derived(team ? cards.filter(card => card.team === team) : cards);
 
   export function appendCards(nextCards: ChecklistCard[]): void {
     cards.push(...nextCards);
   }
+
+  export function prependCards(previousCards: ChecklistCard[]): void {
+    cards.unshift(...previousCards);
+  }
+
+  // Filtering needs every team in the set, so the remaining checklist pages are
+  // fetched as soon as the user reaches for the team picker.
+  async function loadEveryCard(): Promise<void> {
+    if (loadState === 'loading' || loadState === 'complete') return;
+    loadState = 'loading';
+    loadState = await loadAllCards() ? 'complete' : 'failed';
+  }
 </script>
 
+<div class="toolbar" data-tcdb-checklist-team-filter>
+  <label>
+    <span>Team</span>
+    <select bind:value={team} onfocus={loadEveryCard} onpointerdown={loadEveryCard} onchange={loadEveryCard}>
+      <option value="">All teams</option>
+      {#each teams as name}
+        <option value={name}>{name}</option>
+      {/each}
+    </select>
+  </label>
+  <span class="status" aria-live="polite">
+    {#if loadState === 'loading'}
+      Loading every card in the set…
+    {:else if loadState === 'failed'}
+      Could not load every card in the set.
+    {:else if team}
+      {visibleCards.length} {visibleCards.length === 1 ? 'card' : 'cards'}
+    {/if}
+  </span>
+</div>
+
 <div class="gallery">
-  {#each cards as card}
+  {#each visibleCards as card}
     <article data-tcdb-checklist-card="true">
       <a class="art" href={card.cardHref} aria-label={`View ${card.number} ${card.name}`}>
         {#if card.imageSrc}
@@ -47,6 +88,26 @@
 </div>
 
 <style>
+  .toolbar {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .toolbar label {
+    align-items: center;
+    display: flex;
+    font-size: 0.85rem;
+    font-weight: 600;
+    gap: 0.5rem;
+    margin: 0;
+  }
+
+  .toolbar select { font-size: 0.85rem; max-width: 100%; padding: 0.2rem 0.4rem; }
+  .status { color: #64748b; font-size: 0.8rem; }
+
   .gallery {
     display: grid;
     gap: 1.25rem 1rem;

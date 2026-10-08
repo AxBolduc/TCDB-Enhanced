@@ -115,6 +115,58 @@ describe('checklist gallery', () => {
     expect(document.querySelector<HTMLElement>('[data-tcdb-checklist-sentinel]')?.hidden).toBe(true);
   });
 
+  it('filters the gallery to a single team', async () => {
+    enhanceChecklistGallery();
+
+    const select = document.querySelector<HTMLSelectElement>('[data-tcdb-checklist-team-filter] select');
+    const options = Array.from(select?.options ?? []).map(option => option.value);
+    expect(options[0]).toBe('');
+    expect(options).toContain('Los Angeles Dodgers');
+
+    select!.value = 'Los Angeles Dodgers';
+    select!.dispatchEvent(new Event('change', { bubbles: true }));
+
+    await vi.waitFor(() => {
+      const teams = Array.from(document.querySelectorAll('[data-tcdb-checklist-card] [data-card-team]'))
+        .map(team => team.textContent);
+      expect(teams).toEqual(['Los Angeles Dodgers', 'Los Angeles Dodgers']);
+    });
+
+    select!.value = '';
+    select!.dispatchEvent(new Event('change', { bubbles: true }));
+    await vi.waitFor(() => {
+      expect(document.querySelectorAll('[data-tcdb-checklist-card]')).toHaveLength(25);
+    });
+  });
+
+  it('loads every checklist page before filtering by team', async () => {
+    history.replaceState(null, '', '/Checklist.cfm/sid/661316/2026-Topps-Chrome-Big-Ticket-Players?PageIndex=2');
+    localStorage.setItem('tcdb-enhanced:infinite-gallery-enabled', 'false');
+    document.documentElement.innerHTML = fixture.replace(
+      '</body>',
+      '<ul class="pagination"><li><a href="?PageIndex=3">&rsaquo;</a></li></ul></body>',
+    );
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true, text: async () => fixture });
+    vi.stubGlobal('fetch', fetchMock);
+
+    enhanceChecklistGallery();
+    const select = document.querySelector<HTMLSelectElement>('[data-tcdb-checklist-team-filter] select');
+    select?.dispatchEvent(new Event('focus'));
+
+    await vi.waitFor(() => {
+      expect(document.querySelectorAll('[data-tcdb-checklist-card]')).toHaveLength(75);
+    });
+    expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining('PageIndex=1'), { credentials: 'same-origin' });
+    expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining('PageIndex=3'), { credentials: 'same-origin' });
+
+    select!.value = 'Los Angeles Dodgers';
+    select!.dispatchEvent(new Event('change', { bubbles: true }));
+    await vi.waitFor(() => {
+      expect(document.querySelectorAll('[data-tcdb-checklist-card]')).toHaveLength(6);
+    });
+    history.replaceState(null, '', '/');
+  });
+
   it('restores the checklist table when disabled', () => {
     enhanceChecklistGallery();
     restoreOriginalChecklist();

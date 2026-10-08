@@ -6,6 +6,12 @@ export function findNextPageUrl(root: ParentNode): string | null {
   return nextLink ? new URL(nextLink.getAttribute('href')!, location.href).href : null;
 }
 
+export async function fetchChecklistPage(url: string): Promise<Document> {
+  const response = await fetch(url, { credentials: 'same-origin' });
+  if (!response.ok) throw new Error(`Checklist request failed with ${response.status}`);
+  return new DOMParser().parseFromString(await response.text(), 'text/html');
+}
+
 export function findChecklistTable(root: ParentNode): HTMLTableElement | null {
   return Array.from(root.querySelectorAll<HTMLTableElement>('table')).find(table =>
     table.querySelector('a[href*="ViewCard.cfm"] img')
