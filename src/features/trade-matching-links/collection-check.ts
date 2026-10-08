@@ -6,7 +6,18 @@ import { ADDED_CLASS, CELL_CLASS, renderChecking, renderCounts, renderError, WAN
 
 const CHECKED_ATTR = 'data-tcdb-tm-check-queued';
 const COLSPAN_ATTR = 'data-tcdb-tm-original-colspan';
+const ORIGINAL_INDEX_ATTR = 'data-tcdb-tm-original-index';
+const SORT_KEY_ATTR = 'data-tcdb-tm-sort-key';
+const SORT_DIR_ATTR = 'data-tcdb-tm-sort-dir';
 const ADDED_COLUMNS = 2;
+
+type SortKey = 'saleTrade' | 'wantlist';
+type SortDir = 'asc' | 'desc';
+
+const SORT_COLUMNS: Array<{ key: SortKey; label: string }> = [
+  { key: 'saleTrade', label: 'My Wants They Have' },
+  { key: 'wantlist', label: 'Their Wants I Have' },
+];
 const REQUEST_DELAY_MS = 1500;
 let watchingSectionExpansion = false;
 
@@ -41,6 +52,11 @@ export function removeTradeMatchingLinks(): void {
     cell.colSpan = Number(cell.getAttribute(COLSPAN_ATTR));
     cell.removeAttribute(COLSPAN_ATTR);
   });
+  document.querySelectorAll(`[${ORIGINAL_INDEX_ATTR}]`).forEach(row => row.removeAttribute(ORIGINAL_INDEX_ATTR));
+  document.querySelectorAll(`[${SORT_KEY_ATTR}]`).forEach(table => {
+    table.removeAttribute(SORT_KEY_ATTR);
+    table.removeAttribute(SORT_DIR_ATTR);
+  });
 }
 
 function queueCheck(link: HTMLAnchorElement): void {
@@ -61,6 +77,7 @@ function queueCheck(link: HTMLAnchorElement): void {
 }
 
 function addTradeMatchingLinks(): void {
+  let originalIndex = 0;
   const buttons = document.querySelectorAll('button[onclick*="CollectionCheckExp.cfm"][onclick*="Member="]');
 
   for (const button of buttons) {
@@ -73,6 +90,7 @@ function addTradeMatchingLinks(): void {
 
     const table = row.closest('table');
     if (table) addHeaderCells(table);
+    row.setAttribute(ORIGINAL_INDEX_ATTR, String(originalIndex++));
 
     const haveLink = createCountLink(memberName, ADDED_CLASS);
     haveLink.dataset.memberName = memberName;
@@ -91,13 +109,43 @@ function addHeaderCells(table: HTMLTableElement): void {
   const headerRow = table.rows[0];
   if (!headerRow || headerRow.querySelector(`.${CELL_CLASS}`)) return;
 
-  for (const label of ['My Wants They Have', 'Their Wants I Have']) {
+  for (const { key, label } of SORT_COLUMNS) {
     const cell = document.createElement('td');
     cell.className = CELL_CLASS;
+    cell.dataset.sortKey = key;
+    cell.title = `Sort by ${label}`;
+    cell.style.cursor = 'pointer';
+    cell.style.userSelect = 'none';
+    cell.style.whiteSpace = 'nowrap';
     const strong = document.createElement('strong');
     strong.textContent = label;
     cell.appendChild(strong);
+    cell.addEventListener('click', () => {
+      const sameKey = getSortKey(table) === key;
+      table.setAttribute(SORT_KEY_ATTR, key);
+      table.setAttribute(SORT_DIR_ATTR, sameKey && getSortDir(table) === 'desc' ? 'asc' : 'desc');
+      sortTable(table);
+    });
     headerRow.appendChild(cell);
+  }
+  updateSortIndicators(table);
+}
+
+function getSortKey(table: HTMLTableElement): SortKey {
+  return table.getAttribute(SORT_KEY_ATTR) === 'wantlist' ? 'wantlist' : 'saleTrade';
+}
+
+function getSortDir(table: HTMLTableElement): SortDir {
+  return table.getAttribute(SORT_DIR_ATTR) === 'asc' ? 'asc' : 'desc';
+}
+
+function updateSortIndicators(table: HTMLTableElement): void {
+  const key = getSortKey(table);
+  const arrow = getSortDir(table) === 'desc' ? ' ▼' : ' ▲';
+  for (const cell of table.rows[0]?.querySelectorAll<HTMLTableCellElement>(`.${CELL_CLASS}`) ?? []) {
+    const column = SORT_COLUMNS.find(c => c.key === cell.dataset.sortKey);
+    const strong = cell.querySelector('strong');
+    if (column && strong) strong.textContent = column.label + (column.key === key ? arrow : '');
   }
 }
 
@@ -141,11 +189,18 @@ function sortSectionForLink(link: HTMLAnchorElement): void {
   const section = link.closest('.collapse');
   const table = link.closest('table');
   if (!section || !table || !section.classList.contains('show')) return;
+  sortTable(table);
+}
+
+function sortTable(table: HTMLTableElement): void {
+  const key = getSortKey(table);
+  const direction = getSortDir(table) === 'desc' ? -1 : 1;
+  const countAttr = key === 'saleTrade' ? 'saleTradeCount' : 'wantlistCount';
 
   const tbody = table.tBodies[0] || table;
   const rows = Array.from(tbody.rows);
   const headerRows: HTMLTableRowElement[] = [];
-  const groups: Array<{ row: HTMLTableRowElement; detailRow: HTMLTableRowElement | null; originalIndex: number; saleTrade: number }> = [];
+  const groups: Array<{ row: HTMLTableRowElement; detailRow: HTMLTableRowElement | null; originalIndex: number; count: number }> = [];
 
   for (let i = 0; i < rows.length; i += 1) {
     const row = rows[i];
@@ -159,10 +214,20 @@ function sortSectionForLink(link: HTMLAnchorElement): void {
     const detailRow = rows[i + 1]?.querySelector('td[colspan]') ? rows[i + 1] : null;
     if (detailRow) i += 1;
 
-    groups.push({ row, detailRow, originalIndex: groups.length, saleTrade: Number(tradeLink.dataset.saleTradeCount ?? -1) });
+    groups.push({
+      row,
+      detailRow,
+      originalIndex: Number(row.getAttribute(ORIGINAL_INDEX_ATTR) ?? groups.length),
+      count: Number(tradeLink.dataset[countAttr] ?? -1),
+    });
   }
 
-  groups.sort((a, b) => b.saleTrade !== a.saleTrade ? b.saleTrade - a.saleTrade : a.originalIndex - b.originalIndex);
+  // Rows whose counts haven't loaded yet (-1) always sort to the bottom.
+  groups.sort((a, b) => {
+    if ((a.count < 0) !== (b.count < 0)) return a.count < 0 ? 1 : -1;
+    if (a.count !== b.count) return (a.count - b.count) * direction;
+    return a.originalIndex - b.originalIndex;
+  });
 
   for (const row of headerRows) tbody.appendChild(row);
   groups.forEach((group, index) => {
@@ -171,4 +236,5 @@ function sortSectionForLink(link: HTMLAnchorElement): void {
     tbody.appendChild(group.row);
     if (group.detailRow) tbody.appendChild(group.detailRow);
   });
+  updateSortIndicators(table);
 }
